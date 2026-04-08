@@ -1,4 +1,4 @@
-# Guía de Contribución y Organización del Equipo (CONTRIBUTING.md)
+# Guía de Contribución y Organización del Equipo 
 
 Este documento establece la estructura del equipo y las normativas de trabajo para el desarrollo del Servidor de Simulación. Todo el código y la documentación integrados en este repositorio deben seguir estas directrices.
 
