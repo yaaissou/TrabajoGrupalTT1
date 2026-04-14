@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Denegado</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a0000, #3b0000, #1a0000);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+        }
+
+        .container {
+            text-align: center;
+            padding: 3rem 2rem;
+            max-width: 500px;
+        }
+
+        .icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #fc5c7d;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            color: #a0aec0;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .divider {
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #fc5c7d, #6a3093);
+            margin: 1.5rem auto;
+            border-radius: 2px;
+        }
+
+        .code {
+            display: inline-block;
+            background: rgba(252, 92, 125, 0.1);
+            border: 1px solid rgba(252, 92, 125, 0.3);
+            border-radius: 8px;
+            padding: 0.4rem 1rem;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #fc5c7d;
+            margin-top: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">&#128683;</div>
+        <h1>ACCESO DENEGADO</h1>
+        <div class="divider"></div>
+        <p>El token proporcionado no es valido o ha expirado.<br>Verifica el token e intentalo de nuevo.</p>
+        <div class="code">HTTP 403 &mdash; Token invalido</div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mision Conseguida</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+        }
+
+        .container {
+            text-align: center;
+            padding: 3rem 2rem;
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .badge {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            animation: bounce 1.2s ease infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50%       { transform: translateY(-15px); }
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #a0aec0;
+            margin-bottom: 2.5rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 2rem;
+            text-align: left;
+            backdrop-filter: blur(10px);
+        }
+
+        .card h2 {
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #4facfe;
+            margin-bottom: 1.2rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+            gap: 1rem;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            color: #a0aec0;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            color: #e2e8f0;
+            font-size: 0.9rem;
+            text-align: right;
+            word-break: break-all;
+        }
+
+        .estado-badge {
+            display: inline-block;
+            background: linear-gradient(90deg, #11998e, #38ef7d);
+            color: #000;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.75rem;
+            border-radius: 99px;
+        }
+
+        .token-box {
+            margin-top: 2rem;
+            background: rgba(0, 242, 254, 0.07);
+            border: 1px solid rgba(0, 242, 254, 0.25);
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+        }
+
+        .token-box .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #4facfe;
+            margin-bottom: 0.4rem;
+        }
+
+        .token-box code {
+            font-size: 0.8rem;
+            color: #00f2fe;
+            word-break: break-all;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="badge">&#127881;</div>
+
+        <h1>MISION CONSEGUIDA</h1>
+        <p class="subtitle">Acceso autorizado. Simulacion completada con exito.</p>
+
+        <div class="card">
+            <h2>Detalles de la simulacion</h2>
+
+            <div class="detail-row">
+                <span class="detail-label">Nombre</span>
+                <span class="detail-value" th:text="${simulacion.solicitud.nombreSimulacion}">—</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Descripcion</span>
+                <span class="detail-value" th:text="${simulacion.solicitud.descripcion}">—</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Iteraciones</span>
+                <span class="detail-value" th:text="${simulacion.solicitud.iteraciones}">—</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Resultado</span>
+                <span class="detail-value" th:text="${simulacion.resultado}">—</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Estado</span>
+                <span class="detail-value">
+                    <span class="estado-badge" th:text="${simulacion.estado}">COMPLETADA</span>
+                </span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Fecha de creacion</span>
+                <span class="detail-value" th:text="${#temporals.format(simulacion.fechaCreacion, 'dd/MM/yyyy HH:mm:ss')}">—</span>
+            </div>
+        </div>
+
+        <div class="token-box">
+            <div class="label">Token de acceso</div>
+            <code th:text="${token}">—</code>
+        </div>
+    </div>
+</body>
+</html>
