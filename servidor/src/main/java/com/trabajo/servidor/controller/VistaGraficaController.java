@@ -50,6 +50,7 @@ public class VistaGraficaController {
         model.addAttribute("simulacion", simulacion.get());
         model.addAttribute("token", token);
         return "misionConseguida";
+
     }
 
     /**
