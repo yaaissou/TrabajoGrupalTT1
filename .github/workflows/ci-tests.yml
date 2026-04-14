@@ -22,7 +22,9 @@ jobs:
         cache: maven 
 
     - name: Ejecutar Tests con Maven
-      run: mvn clean test
+      run: |
+        cd servidor
+        mvn clean test
 
     - name: Actualizar rama early
       if: success() 
