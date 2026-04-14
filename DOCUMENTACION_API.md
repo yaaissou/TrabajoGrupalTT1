@@ -22,7 +22,7 @@ El sistema interactúa con el cliente mediante el siguiente ciclo:
 * **Descripción:** Recibe la configuración técnica, registra la simulación en el almacenamiento en memoria y genera un token identificador.
 
 **Estructura de la Petición (Request Body)**
-El cuerpo del mensaje debe ser un objeto JSON que represente la clase `DatosSolicitud`:
+El cuerpo del mensaje debe ser un objeto JSON que represente la clase `DatosSolicitud`.
 
 ### 2.2. Acceder mediante Token
 * **Método:** `GET`
