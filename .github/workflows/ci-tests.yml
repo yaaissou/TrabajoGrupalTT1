@@ -7,6 +7,8 @@ on:
 jobs:
   test-and-merge:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
     - name: Descargar el código
