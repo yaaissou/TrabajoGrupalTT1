@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Resultado de Solicitud</title>
+</head>
+<body>
+<p>Su solicitud se ha realizado. Puede descargar los resultados cuando estén disponibles con el siguiente token:</p>
+<h1 th:text="${token}"></h1>
+
+<a th:href="@{/grid(tok=${token})}">
+    <button type="button">Ver Cuadrícula de Simulación</button>
+</a>
+</body>
+</html>
