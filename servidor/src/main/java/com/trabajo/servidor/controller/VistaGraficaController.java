@@ -13,6 +13,7 @@ import java.util.Optional;
  * Controlador que sirve las vistas Thymeleaf de la interfaz gráfica.
  *
  * Rutas manejadas:
+ *  - GET /                          → página de inicio con formulario
  *  - GET /vista-grafica/{token}     → página "Misión Conseguida"
  *  - GET /error/acceso-denegado     → página de error por token inválido
  */
@@ -23,6 +24,14 @@ public class VistaGraficaController {
 
     public VistaGraficaController(SimulacionService simulacionService) {
         this.simulacionService = simulacionService;
+    }
+
+    /**
+     * Página de inicio: formulario para solicitar un token.
+     */
+    @GetMapping("/")
+    public String inicio() {
+        return "inicio";
     }
 
     /**

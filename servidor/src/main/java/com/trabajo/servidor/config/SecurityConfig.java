@@ -43,8 +43,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 // Permitir sin autenticación los endpoints de simulación
                 .requestMatchers("/api/simulacion/**").permitAll()
-                // Permitir las rutas de error y la futura interfaz gráfica
-                .requestMatchers("/error/**", "/vista-grafica/**").permitAll()
+                // Permitir la página de inicio, errores e interfaz gráfica
+                .requestMatchers("/", "/error/**", "/vista-grafica/**").permitAll()
                 // Cualquier otra petición requiere autenticación
                 .anyRequest().authenticated()
             );
