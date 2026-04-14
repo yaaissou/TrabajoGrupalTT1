@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * Nota: se usa @Controller (no @RestController) para que el método
  * de acceso pueda retornar una cadena "redirect:..." que Spring MVC
  * interpreta como una redirección HTTP 302.
- * El método POST lleva @ResponseBody para devolver texto plano.
+ * El metodo POST lleva @ResponseBody para devolver texto plano.
  */
 @Controller
 @RequestMapping("/api/simulacion")
