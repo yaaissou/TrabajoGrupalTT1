@@ -24,13 +24,6 @@ El sistema interactúa con el cliente mediante el siguiente ciclo:
 **Estructura de la Petición (Request Body)**
 El cuerpo del mensaje debe ser un objeto JSON que represente la clase `DatosSolicitud`:
 
-```json
-{
-  "nombreSimulacion": "Prueba 1",
-  "descripcion": "Escenario de carga inicial",
-  "iteraciones": 100
-}
-
 ### 2.2. Acceder mediante Token
 * **Método:** `GET`
 * **URL:** `/api/simulacion/acceder/{token}`
