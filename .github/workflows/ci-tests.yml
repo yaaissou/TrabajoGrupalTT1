@@ -7,6 +7,8 @@ on:
 jobs:
   test-and-merge:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
     - name: Descargar el código
@@ -22,7 +24,9 @@ jobs:
         cache: maven 
 
     - name: Ejecutar Tests con Maven
-      run: mvn clean test
+      run: |
+        cd servidor
+        mvn clean test
 
     - name: Actualizar rama early
       if: success() 

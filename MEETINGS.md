@@ -27,3 +27,24 @@ Este documento contiene el registro cronológico de las reuniones de sincronizac
 * **Equipo completo:** Iniciar el análisis funcional de los tres *endpoints* principales de la API REST para comenzar su implementación en los próximos días.
 
 ---
+
+## Acta 02: Reunión de Estructuración
+* **Fecha:** 14 de Abril de 2026
+* **Asistentes:** Pablo Ramirez, Marcos Zorzano, Yazid Aissou, Angel Muro.
+* **Tipo de reunión:** Elección de tipo de proyecto y estructuración técnica.
+
+#### 📝 Orden del Día
+1. Elecciones sobre la arquitectura de persistencia y flujo de envío de solicitudes.
+2. Diseño de la estrategia de ramas en el repositorio y automatización de despliegue.
+3. Planificación de la documentación técnica y empaquetado del servicio mediante contenedores.
+
+#### 🤝 Acuerdos Adoptados
+* **Jerarquía de Ramas:** Se acuerda la creación de un sistema de tres ramas: `main` (desarrollo activo), `early` (código validado por tests) y `stable` (versión pública definitiva).
+* **Automatización CI/CD:** Implementación de *GitHub Actions* para ejecutar tests unitarios de forma automática en cada commit y gestionar la publicación de la documentación Javadoc vía *GitHub Pages*.
+* **Estandarización del Entorno:** Adopción de Docker para el empaquetado del servidor, garantizando la compatibilidad del software en todos los puestos de trabajo.
+
+#### 🚀 Próximos Pasos 
+* **Programador (Pablo):** Desarrollar la lógica principal del servidor para la recepción de solicitudes, y la obtencion de tockens.
+* **DevOps (Angel):** Configurar las ramas en GitHub y redactar el `Dockerfile` del proyecto.
+* **Tester (Marcos):** Iniciar el diseño de la suite de pruebas unitarias para validar la integridad de la generación de tokens.
+* **Redactor (Yazid):** Comenzar la redacción de la especificación técnica de la API en el archivo `DOCUMENTACION_API.md` basándose en el flujo de solicitudes acordado.

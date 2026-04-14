@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitar Simulacion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .header .icon {
+            font-size: 3.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .header h1 {
+            font-size: 1.9rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: #a0aec0;
+            font-size: 0.9rem;
+            margin-top: 0.4rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .field {
+            margin-bottom: 1.25rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #4facfe;
+            margin-bottom: 0.45rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 0.7rem 1rem;
+            color: #e2e8f0;
+            font-size: 0.95rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #4facfe;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        input[type="number"]::-webkit-inner-spin-button {
+            opacity: 0.4;
+        }
+
+        .btn {
+            width: 100%;
+            margin-top: 0.5rem;
+            padding: 0.85rem;
+            background: linear-gradient(90deg, #00f2fe, #4facfe);
+            color: #0f0c29;
+            font-weight: 800;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Mensaje de error */
+        .error-msg {
+            display: none;
+            margin-top: 1rem;
+            background: rgba(252, 92, 125, 0.12);
+            border: 1px solid rgba(252, 92, 125, 0.35);
+            border-radius: 8px;
+            padding: 0.7rem 1rem;
+            color: #fc5c7d;
+            font-size: 0.85rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="icon">&#128640;</div>
+            <h1>SIMULADOR</h1>
+            <p>Rellena los datos y solicita tu token de acceso</p>
+        </div>
+
+        <div class="card">
+            <div class="field">
+                <label for="nombre">Nombre de la simulacion</label>
+                <input type="text" id="nombre" placeholder="Ej: Prueba de carga inicial" />
+            </div>
+
+            <div class="field">
+                <label for="descripcion">Descripcion</label>
+                <textarea id="descripcion" placeholder="Describe el escenario a simular..."></textarea>
+            </div>
+
+            <div class="field">
+                <label for="iteraciones">Numero de iteraciones</label>
+                <input type="number" id="iteraciones" placeholder="Ej: 100" min="1" />
+            </div>
+
+            <button class="btn" id="btnSolicitar" onclick="solicitarToken()">
+                SOLICITAR TOKEN
+            </button>
+
+            <div class="error-msg" id="errorMsg">
+                Error al solicitar el token. Comprueba los datos e intentalo de nuevo.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function solicitarToken() {
+            const nombre      = document.getElementById('nombre').value.trim();
+            const descripcion = document.getElementById('descripcion').value.trim();
+            const iteraciones = parseInt(document.getElementById('iteraciones').value, 10);
+            const btn         = document.getElementById('btnSolicitar');
+            const errorMsg    = document.getElementById('errorMsg');
+
+            // Validacion basica en cliente
+            if (!nombre || !iteraciones || iteraciones < 1) {
+                errorMsg.style.display = 'block';
+                errorMsg.textContent = 'El nombre y las iteraciones son obligatorios.';
+                return;
+            }
+
+            errorMsg.style.display = 'none';
+            btn.disabled = true;
+            btn.textContent = 'Generando token...';
+
+            try {
+                const response = await fetch('/api/simulacion/solicitar', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nombreSimulacion: nombre,
+                        descripcion:      descripcion,
+                        iteraciones:      iteraciones
+                    })
+                });
+
+                if (!response.ok) throw new Error('Respuesta no OK');
+
+                const token = await response.text();
+
+                // Redirigir al endpoint que valida el token y lleva a la vista grafica
+                window.location.href = '/api/simulacion/acceder/' + token;
+
+            } catch (e) {
+                errorMsg.style.display = 'block';
+                errorMsg.textContent = 'Error al solicitar el token. Intentalo de nuevo.';
+                btn.disabled = false;
+                btn.textContent = 'SOLICITAR TOKEN';
+            }
+        }
+    </script>
+</body>
+</html>
