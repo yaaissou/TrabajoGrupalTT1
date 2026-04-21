@@ -1,11 +1,5 @@
-# 1. Usar una imagen oficial de Java 23
-FROM eclipse-temurin:23-jdk
-
-# 2. Exponer el puerto por defecto de Spring Boot
+FROM eclipse-temurin:17-jdk
 EXPOSE 8080
-
-# 3. Copiar el ejecutable compilado desde tu ordenador al contenedor
-COPY target/servidor-0.0.1-SNAPSHOT.jar app.jar
-
-# 4. Comando exacto para arrancar el servidor
+# Fíjate en la ruta que empieza por servidor/
+COPY servidor/target/servidor-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java", "-jar", "/app.jar"]
