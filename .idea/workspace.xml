@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="be1768af-7036-4389-8e28-244df1e092a0" name="Changes" comment="tests hechos">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="be1768af-7036-4389-8e28-244df1e092a0" name="Changes" comment="tests hechos" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -40,6 +38,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
@@ -72,6 +71,7 @@
       <updated>1776178024619</updated>
       <workItem from="1776178031526" duration="381000" />
       <workItem from="1776778107008" duration="1073000" />
+      <workItem from="1776781258563" duration="303000" />
     </task>
     <task id="LOCAL-00001" summary="tests hechos">
       <option name="closed" value="true" />
