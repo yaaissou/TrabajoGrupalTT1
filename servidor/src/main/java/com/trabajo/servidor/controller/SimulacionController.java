@@ -14,17 +14,20 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * Controlador REST que gestiona el ciclo de vida de las simulaciones
  * basado en tokens.
- *
+ * <p>
  * Flujo completo:
- *   1. El usuario hace POST a /api/simulacion/solicitar con sus datos.
- *   2. El servidor guarda la simulación y devuelve un token único.
- *   3. El usuario hace GET a /api/simulacion/acceder/{token}.
- *   4. El servidor valida el token y redirige a la interfaz gráfica.
- *
- * Nota: se usa @Controller (no @RestController) para que el método
+ * <ol>
+ * <li>El usuario hace POST a /api/simulacion/solicitar con sus datos.</li>
+ * <li>El servidor guarda la simulación y devuelve un token único.</li>
+ * <li>El usuario hace GET a /api/simulacion/acceder/{token}.</li>
+ * <li>El servidor valida el token y redirige a la interfaz gráfica.</li>
+ * </ol>
+ * <p>
+ * Nota: se usa {@code @Controller} (no {@code @RestController}) para que el método
  * de acceso pueda retornar una cadena "redirect:..." que Spring MVC
  * interpreta como una redirección HTTP 302.
- * El metodo POST lleva @ResponseBody para devolver texto plano.
+ * El método POST lleva {@code @ResponseBody} para devolver texto plano.
+ * @version 1.0
  */
 @Controller
 @RequestMapping("/api/simulacion")
@@ -35,6 +38,8 @@ public class SimulacionController {
     /**
      * Inyección de dependencia por constructor (práctica recomendada).
      * Spring inyecta automáticamente el bean SimulacionServiceImpl.
+     *
+     * @param simulacionService Objeto que contiene la lógica de negocio para gestionar simulaciones.
      */
     public SimulacionController(SimulacionService simulacionService) {
         this.simulacionService = simulacionService;
@@ -47,18 +52,21 @@ public class SimulacionController {
     /**
      * Recibe los datos de configuración del usuario, genera una simulación
      * mock, la guarda en memoria y devuelve el token de acceso.
-     *
-     * Método:  POST
-     * URL:     /api/simulacion/solicitar
-     * Body:    JSON con los campos de DatosSolicitud
-     * Retorna: El token UUID en texto plano (HTTP 200)
-     *
-     * Ejemplo de body:
+     * <p>
+     * <strong>Método:</strong> POST<br>
+     * <strong>URL:</strong> /api/simulacion/solicitar
+     * <p>
+     * <strong>Ejemplo de body:</strong>
+     * <pre>{@code
      * {
-     *   "nombreSimulacion": "Prueba 1",
-     *   "descripcion": "Escenario de carga inicial",
-     *   "iteraciones": 100
+     * "nombreSimulacion": "Prueba 1",
+     * "descripcion": "Escenario de carga inicial",
+     * "iteraciones": 100
      * }
+     * }</pre>
+     *
+     * @param solicitud JSON mapeado a la clase {@link DatosSolicitud} con los parámetros de la petición.
+     * @return {@link ResponseEntity} que contiene el token UUID en texto plano (HTTP 200).
      */
     @PostMapping("/solicitar")
     @ResponseBody
@@ -78,18 +86,19 @@ public class SimulacionController {
 
     /**
      * Valida el token recibido en la URL y redirige al destino correcto.
-     *
-     * Método:  GET
-     * URL:     /api/simulacion/acceder/{token}
-     *
-     * Si el token ES válido   → redirige a /vista-grafica/{token}
-     * Si el token NO es válido → redirige a /error/acceso-denegado
-     *
+     * <p>
+     * <strong>Método:</strong> GET<br>
+     * <strong>URL:</strong> /api/simulacion/acceder/{token}
+     * <ul>
+     * <li>Si el token <strong>ES válido</strong>   → redirige a /vista-grafica/{token}</li>
+     * <li>Si el token <strong>NO es válido</strong> → redirige a /error/acceso-denegado</li>
+     * </ul>
+     * <p>
      * La cadena "redirect:..." hace que Spring MVC envíe una respuesta
      * HTTP 302 con el header Location apuntando a la nueva ruta.
      *
-     * @param token el UUID recibido como variable de ruta
-     * @return cadena de redirección interpretada por Spring MVC
+     * @param token El UUID recibido como variable de ruta desde el cliente.
+     * @return Cadena de redirección interpretada por Spring MVC.
      */
     @GetMapping("/acceder/{token}")
     public String accederConToken(@PathVariable String token) {
