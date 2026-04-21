@@ -35,4 +35,90 @@ public class DatosSolicitud {
      * debe ejecutar para generar el resultado final.
      */
     private int iteraciones;
+    // ========================================================================
+    // CONSTRUCTORES
+    // ========================================================================
+
+    /**
+     * Constructor por defecto (vacío).
+     * <p>
+     * Requerido obligatoriamente por herramientas como Spring y Jackson para poder
+     * construir el objeto automáticamente cuando se recibe un JSON desde el cliente.
+     */
+    public DatosSolicitud() {
+    }
+
+    /**
+     * Constructor con todos los parámetros.
+     * <p>
+     * Crea una nueva instancia de la solicitud inicializando todos sus valores
+     * en el momento de la creación.
+     *
+     * @param nombreSimulacion Nombre o título descriptivo de la simulación.
+     * @param descripcion      Explicación detallada del contexto o escenario a simular.
+     * @param iteraciones      Número total de ciclos que deberá ejecutar el motor.
+     */
+    public DatosSolicitud(String nombreSimulacion, String descripcion, int iteraciones) {
+        this.nombreSimulacion = nombreSimulacion;
+        this.descripcion = descripcion;
+        this.iteraciones = iteraciones;
+    }
+
+    // ========================================================================
+    // GETTERS Y SETTERS EXPLÍCITOS
+    // ========================================================================
+
+    /**
+     * Obtiene el nombre asignado a esta solicitud de simulación.
+     *
+     * @return El nombre descriptivo en formato texto.
+     */
+    public String getNombreSimulacion() {
+        return nombreSimulacion;
+    }
+
+    /**
+     * Asigna o actualiza el nombre de la simulación.
+     *
+     * @param nombreSimulacion El nuevo nombre a establecer.
+     */
+    public void setNombreSimulacion(String nombreSimulacion) {
+        this.nombreSimulacion = nombreSimulacion;
+    }
+
+    /**
+     * Obtiene la descripción detallada del escenario.
+     *
+     * @return El texto con la descripción, o nulo si no se proporcionó.
+     */
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    /**
+     * Establece una nueva descripción para el escenario de la simulación.
+     *
+     * @param descripcion El texto descriptivo a guardar.
+     */
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    /**
+     * Obtiene el número de iteraciones configuradas para el cálculo.
+     *
+     * @return La cantidad de ciclos matemáticos a ejecutar.
+     */
+    public int getIteraciones() {
+        return iteraciones;
+    }
+
+    /**
+     * Modifica el número de iteraciones que deberá realizar el motor.
+     *
+     * @param iteraciones La nueva cantidad entera de ciclos.
+     */
+    public void setIteraciones(int iteraciones) {
+        this.iteraciones = iteraciones;
+    }
 }

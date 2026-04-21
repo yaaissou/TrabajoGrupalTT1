@@ -5,16 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="be1768af-7036-4389-8e28-244df1e092a0" name="Changes" comment="tests hechos">
-      <change afterPath="$PROJECT_DIR$/.idea/TrabajoGrupalTT1.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/ServidorApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/ServidorApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/controller/SimulacionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/controller/SimulacionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/controller/VistaGraficaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/controller/VistaGraficaController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/DatosSimulacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/DatosSimulacion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/DatosSolicitud.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/DatosSolicitud.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/Entidad.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/Entidad.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -77,7 +70,7 @@
       <option name="presentableId" value="Default" />
       <updated>1776178024619</updated>
       <workItem from="1776178031526" duration="381000" />
-      <workItem from="1776778107008" duration="676000" />
+      <workItem from="1776778107008" duration="1073000" />
     </task>
     <task id="LOCAL-00001" summary="tests hechos">
       <option name="closed" value="true" />
