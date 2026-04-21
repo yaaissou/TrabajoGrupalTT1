@@ -1,9 +1,5 @@
 package com.trabajo.servidor.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
 /**
@@ -13,29 +9,66 @@ import java.time.LocalDateTime;
  * La CLAVE del mapa es el campo {@code token}, que actúa como
  * identificador único de acceso para el usuario.
  */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class DatosSimulacion {
 
-    /**
-     * Token UUID único que identifica esta simulación.
-     * El usuario lo usa como llave de acceso a la interfaz gráfica.
-     */
     private String token;
-
-    /** Datos originales que el usuario envió en la solicitud */
     private DatosSolicitud solicitud;
-
-    /** Resultado generado por el servidor (mock en esta fase) */
     private String resultado;
-
-    /**
-     * Estado del ciclo de vida de la simulación.
-     * Valores posibles: PENDIENTE, EN_PROCESO, COMPLETADA, ERROR
-     */
     private String estado;
-
-    /** Fecha y hora exactas en que se creó la simulación */
     private LocalDateTime fechaCreacion;
+
+    // Constructor vacío
+    public DatosSimulacion() {
+    }
+
+    // Constructor con todos los parámetros
+    public DatosSimulacion(String token, DatosSolicitud solicitud, String resultado, String estado, LocalDateTime fechaCreacion) {
+        this.token = token;
+        this.solicitud = solicitud;
+        this.resultado = resultado;
+        this.estado = estado;
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    // --- Getters y Setters explícitos ---
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public DatosSolicitud getSolicitud() {
+        return solicitud;
+    }
+
+    public void setSolicitud(DatosSolicitud solicitud) {
+        this.solicitud = solicitud;
+    }
+
+    public String getResultado() {
+        return resultado;
+    }
+
+    public void setResultado(String resultado) {
+        this.resultado = resultado;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public LocalDateTime getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(LocalDateTime fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
 }
