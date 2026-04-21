@@ -16,7 +16,7 @@ Cada dos semanas, los integrantes avanzan un puesto hacia la derecha siguiendo e
 * **Redactor:** Yazid Aissou
 * **DevOps:** Angel Muro
 
-**Asignación Actual (Semanas 3):**
+**Asignación Actual (Semana 3):**
 * **Programador:** Angel Muro
 * **Tester:** Pablo Ramirez
 * **Redactor:** Marcos Zorzano
