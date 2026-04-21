@@ -48,3 +48,29 @@ Este documento contiene el registro cronológico de las reuniones de sincronizac
 * **DevOps (Angel):** Configurar las ramas en GitHub y redactar el `Dockerfile` del proyecto.
 * **Tester (Marcos):** Iniciar el diseño de la suite de pruebas unitarias para validar la integridad de la generación de tokens.
 * **Redactor (Yazid):** Comenzar la redacción de la especificación técnica de la API en el archivo `DOCUMENTACION_API.md` basándose en el flujo de solicitudes acordado.
+
+---
+
+## Acta 03: Revisión de Infraestructura, Testing y Documentación
+* **Fecha:** 21 de Abril de 2026
+* **Asistentes:** Pablo Ramirez, Marcos Zorzano, Yazid Aissou, Angel Muro.
+* **Tipo de reunión:** Resolución de incidencias técnicas, estabilización del código y generación de manuales.
+
+#### 📝 Orden del Día
+1. Formalización del cambio de roles semanales según lo establecido en `CONTRIBUTING.md`.
+2. Evaluación y resolución de problemas de compilación en el entorno de pruebas y CI/CD (GitHub Actions).
+3. Debate sobre la gestión de modelos de datos (uso de la librería Lombok frente a Vanilla Java).
+4. Revisión de la documentación técnica generada (Javadoc) y empaquetado final del contenedor Docker.
+
+#### 🤝 Acuerdos Adoptados
+* **Downgrade a Java 17 (LTS):** Se aprueba por unanimidad bajar la versión del proyecto de Java 23 a Java 17 LTS en el archivo `pom.xml` y en los flujos de GitHub Actions. Esto asegura la compatibilidad total con herramientas de testing como Mockito y otorga mayor estabilidad a largo plazo.
+* **Refactorización de Modelos y Lombok:** Se resolvió el conflicto de dependencias y errores de "clase ya definida" depurando las clases `DatosSolicitud` y `DatosSimulacion` para garantizar la robustez del pipeline en terminal, asegurando que constructores y getters/setters no generen fallos al compilar.
+* **Estabilización de Tests:** Se corrigieron los problemas de inicialización (NullPointerException) en los tests de integración de la vista gráfica (`misionConseguida.html`), logrando que la suite completa de 11 tests pase con éxito en la integración continua.
+* **Documentación Javadoc Integral:** Se acuerda mantener el estándar de calidad en la documentación, utilizando etiquetas HTML y anotaciones oficiales (`@param`, `@return`, `@author`) en toda la capa de Controladores, Modelos, Configuración y clase principal, solventando los problemas de generación de Maven.
+* **Aislamiento en Docker:** Se valida la configuración del `Dockerfile` utilizando la imagen ligera `eclipse-temurin:17-jdk` y corrigiendo las rutas hacia `servidor/target/`, logrando un despliegue local exitoso por el puerto 8080.
+
+#### 🚀 Próximos Pasos 
+* **Programador (Angel):** Iniciar el desarrollo de la lógica matemática de simulación real, dado que la arquitectura base y la persistencia en memoria (`ConcurrentHashMap`) ya están validadas.
+* **DevOps (Yazid):** Monitorizar el pipeline automático de GitHub Actions tras la sincronización de ramas (`main` a `early`) y asegurar que los despliegues en contenedores sigan siendo estables con los futuros cambios.
+* **Tester (Pablo):** Diseñar nuevos casos de prueba para cubrir la lógica de negocio y los cálculos matemáticos que el programador implementará en el próximo ciclo, manteniendo el 100% de los tests en verde.
+* **Redactor (Marcos):** Actualizar y expandir el documento `DOCUMENTACION_API.md` con las respuestas y peticiones finales, y volver a compilar el sitio web estático de Javadoc (`mvn javadoc:javadoc`) si se añaden nuevas clases.
