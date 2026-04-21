@@ -18,6 +18,7 @@
     <option name="cachedIndexableFilesCount" value="35" />
   </component>
   <component name="Git.Settings">
+    <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="McpProjectServerCommands">
@@ -53,7 +54,6 @@
     &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}</component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -71,6 +71,8 @@
       <updated>1776178024619</updated>
       <workItem from="1776178031526" duration="381000" />
       <workItem from="1776778107008" duration="1073000" />
+      <updated>1776778229724</updated>
+      <workItem from="1776778237337" duration="1195000" />
     </task>
     <task id="LOCAL-00001" summary="tests hechos">
       <option name="closed" value="true" />
