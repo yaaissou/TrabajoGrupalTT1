@@ -1,35 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="a9c277d5-8832-4e96-a107-e1eeb803b05a" name="Changes" comment="añade getters y constructores manuales en DatosSolicitud y DatosSimulacion para solucionar error de compilación" />
+    <list default="true" id="be1768af-7036-4389-8e28-244df1e092a0" name="Changes" comment="tests hechos">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/DatosSimulacion.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/DatosSimulacion.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/DatosSolicitud.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/DatosSolicitud.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="35" />
+  </component>
   <component name="Git.Settings">
     <option name="PUSH_AUTO_UPDATE" value="true" />
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 5
-}]]></component>
-  <component name="ProjectId" id="3CfYiy3jAc4z1cG54DE47QryHu3" />
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 7
+}</component>
+  <component name="ProjectId" id="3CLwBMHAl4Fo5wC626IVpL9utdv" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "kotlin-language-version-configured": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -40,20 +64,23 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="a9c277d5-8832-4e96-a107-e1eeb803b05a" name="Changes" comment="" />
-      <created>1776778229724</created>
+      <changelist id="be1768af-7036-4389-8e28-244df1e092a0" name="Changes" comment="" />
+      <created>1776178024619</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
+      <updated>1776178024619</updated>
+      <workItem from="1776178031526" duration="381000" />
+      <workItem from="1776778107008" duration="1073000" />
       <updated>1776778229724</updated>
       <workItem from="1776778237337" duration="1195000" />
     </task>
-    <task id="LOCAL-00001" summary="añade getters y constructores manuales en DatosSolicitud y DatosSimulacion para solucionar error de compilación">
+    <task id="LOCAL-00001" summary="tests hechos">
       <option name="closed" value="true" />
-      <created>1776778729111</created>
+      <created>1776178089725</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1776778729111</updated>
+      <updated>1776178089725</updated>
     </task>
     <option name="localTasksCounter" value="2" />
     <servers />
@@ -62,7 +89,7 @@
     <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="añade getters y constructores manuales en DatosSolicitud y DatosSimulacion para solucionar error de compilación" />
-    <option name="LAST_COMMIT_MESSAGE" value="añade getters y constructores manuales en DatosSolicitud y DatosSimulacion para solucionar error de compilación" />
+    <MESSAGE value="tests hechos" />
+    <option name="LAST_COMMIT_MESSAGE" value="tests hechos" />
   </component>
 </project>
