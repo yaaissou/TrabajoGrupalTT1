@@ -52,6 +52,10 @@ public class SecurityConfig {
                         .requestMatchers("/api/simulacion/**").permitAll()
                         // Permitir la página de inicio, errores e interfaz gráfica
                         .requestMatchers("/", "/error/**", "/vista-grafica/**").permitAll()
+                        // Endpoints consumidos por trabajo-individual
+                        .requestMatchers("/Solicitud/**", "/Resultados").permitAll()
+                        // Páginas del juego
+                        .requestMatchers("/test.html", "/juego/**").permitAll()
                         // Cualquier otra petición requiere autenticación
                         .anyRequest().authenticated()
                 );

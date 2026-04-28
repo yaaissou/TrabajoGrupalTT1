@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Partida</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: sans-serif; background: #1a1a2e; color: #eee; min-height: 100vh; padding: 24px; }
+
+        header { text-align: center; margin-bottom: 24px; }
+        header h1 { color: #7ec8e3; font-size: 1.6em; letter-spacing: 2px; }
+        header .subtitulo { color: #888; font-size: 0.85em; margin-top: 4px; }
+        header .subtitulo span { color: #e94560; font-weight: bold; }
+
+        /* Controles */
+        #controles { background: #16213e; border-radius: 12px; padding: 20px 24px;
+                     max-width: 540px; margin: 0 auto 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+        #infoTurno { font-size: 1.3em; color: #7ec8e3; font-weight: bold; text-align: center; margin-bottom: 12px; }
+        #slider { width: 100%; cursor: pointer; accent-color: #e94560; margin-bottom: 12px; }
+        #botonesNav { display: flex; justify-content: center; gap: 10px; margin-bottom: 10px; }
+        #botonesNav button { padding: 8px 22px; border-radius: 8px; border: none;
+                             background: #0f3460; color: #fff; cursor: pointer; font-size: 0.95em; }
+        #botonesNav button:hover { background: #7ec8e3; color: #1a1a2e; }
+        #descripcion { text-align: center; font-size: 0.82em; color: #aaa; min-height: 18px; }
+
+        /* Leyenda */
+        #leyenda { display: flex; gap: 14px; flex-wrap: wrap; justify-content: center; margin-bottom: 16px; font-size: 0.8em; }
+        .item-leyenda { display: flex; align-items: center; gap: 5px; }
+        .caja { width: 16px; height: 16px; border-radius: 3px; border: 1px solid #444; flex-shrink: 0; }
+
+        /* Tablero */
+        #tableroWrap { overflow-x: auto; }
+        table#tablero { border-collapse: collapse; margin: 0 auto; }
+        table#tablero td { width: 36px; height: 36px; border: 1px solid #2a2a4a; transition: background-color 0.1s; }
+
+        /* Volver */
+        .nav-footer { text-align: center; margin-top: 24px; }
+        .nav-footer a { color: #7ec8e3; text-decoration: none; font-size: 0.85em; margin: 0 12px; }
+        .nav-footer a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>⚓ Hundir la Flota</h1>
+    <div class="subtitulo">Token: <span th:text="${tok}">—</span></div>
+</header>
+
+<div id="leyenda">
+    <div class="item-leyenda"><div class="caja" style="background:#4488cc"></div> Agua</div>
+    <div class="item-leyenda"><div class="caja" style="background:#808080"></div> Barco</div>
+    <div class="item-leyenda"><div class="caja" style="background:#99ccff"></div> Fallo</div>
+    <div class="item-leyenda"><div class="caja" style="background:orange"></div> Tocado</div>
+    <div class="item-leyenda"><div class="caja" style="background:#cc0000"></div> Hundido</div>
+</div>
+
+<div id="controles">
+    <div id="infoTurno">Turno 0</div>
+    <input type="range" id="slider" min="0" value="0">
+    <div id="botonesNav">
+        <button onclick="cambiarTurno(-1)">◀ Anterior</button>
+        <button onclick="autoPlay()" id="btnAuto">⏵ Auto</button>
+        <button onclick="cambiarTurno(1)">Siguiente ▶</button>
+    </div>
+    <div id="descripcion">Estado inicial — barcos colocados</div>
+</div>
+
+<div id="tableroWrap">
+    <table id="tablero"></table>
+</div>
+
+<!-- Datos inyectados por Thymeleaf -->
+<div id="datosCrudos" style="display:none;" th:text="${datosGrid}"></div>
+
+<div class="nav-footer">
+    <a href="/test.html">← Nueva partida</a>
+    <a th:href="@{/juego/token(tok=${tok})}">Ver token</a>
+</div>
+
+<script>
+    const texto   = document.getElementById('datosCrudos').innerText.trim();
+    const lineas  = texto.split('\n');
+    const tamano  = parseInt(lineas[0]) || 10;
+
+    let turnosData  = {};
+    let maxTurno    = 0;
+    let turnoActual = 0;
+    let autoInterval = null;
+
+    // Parsear datos
+    for (let i = 1; i < lineas.length; i++) {
+        const p = lineas[i].split(',');
+        if (p.length < 4) continue;
+        const t = parseInt(p[0]), y = parseInt(p[1]), x = parseInt(p[2]), color = p[3].trim();
+        if (t > maxTurno) maxTurno = t;
+        if (!turnosData[t]) turnosData[t] = [];
+        turnosData[t].push({ x, y, color });
+    }
+
+    // Construir tabla
+    const tabla = document.getElementById('tablero');
+    let html = '';
+    for (let f = 0; f < tamano; f++) {
+        html += '<tr>';
+        for (let c = 0; c < tamano; c++) html += `<td id="c_${f}_${c}"></td>`;
+        html += '</tr>';
+    }
+    tabla.innerHTML = html;
+
+    // Configurar slider
+    const slider = document.getElementById('slider');
+    slider.max = maxTurno;
+    slider.oninput = () => irATurno(parseInt(slider.value));
+
+    function irATurno(t) {
+        turnoActual = t;
+        slider.value = t;
+        (turnosData[t] || []).forEach(({ x, y, color }) => {
+            const td = document.getElementById(`c_${y}_${x}`);
+            if (td) td.style.backgroundColor = color;
+        });
+
+        const celdas   = turnosData[t] || [];
+        const hundidos = celdas.filter(c => c.color === '#cc0000').length;
+        const tocados  = celdas.filter(c => c.color === 'orange').length;
+        const fallos   = celdas.filter(c => c.color === '#99ccff').length;
+
+        let desc = t === 0 ? 'Estado inicial — barcos colocados' : `Disparo nº ${t}`;
+        if (hundidos) desc += `  ·  ${hundidos} celdas hundidas 🔴`;
+        if (tocados)  desc += `  ·  ${tocados} tocadas 🟠`;
+        if (fallos)   desc += `  ·  ${fallos} fallos 💧`;
+
+        document.getElementById('descripcion').textContent = desc;
+        document.getElementById('infoTurno').textContent = `Turno ${t} / ${maxTurno}`;
+    }
+
+    function cambiarTurno(delta) {
+        irATurno(Math.max(0, Math.min(maxTurno, turnoActual + delta)));
+    }
+
+    function autoPlay() {
+        if (autoInterval) {
+            clearInterval(autoInterval);
+            autoInterval = null;
+            document.getElementById('btnAuto').textContent = '⏵ Auto';
+            return;
+        }
+        irATurno(0);
+        document.getElementById('btnAuto').textContent = '⏸ Pausa';
+        autoInterval = setInterval(() => {
+            if (turnoActual >= maxTurno) {
+                clearInterval(autoInterval);
+                autoInterval = null;
+                document.getElementById('btnAuto').textContent = '⏵ Auto';
+                return;
+            }
+            cambiarTurno(1);
+        }, 120);
+    }
+
+    irATurno(0);
+</script>
+</body>
+</html>
