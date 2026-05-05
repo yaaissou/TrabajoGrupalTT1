@@ -42,7 +42,7 @@ public class HundirFlotaServiceImpl implements HundirFlotaService {
     }
 
     @Override
-    public String obtenerRawData(String token) {
+    public String obtenerRawData(int token) {
         return partidas.getOrDefault(token, null);
     }
 
@@ -264,4 +264,5 @@ public class HundirFlotaServiceImpl implements HundirFlotaService {
         if (size == 3) return COLOR_GAMMA;
         return COLOR_BETA;
     }
+
 }
