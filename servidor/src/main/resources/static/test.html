@@ -26,25 +26,6 @@
         button#btnSimular:disabled { background: #555; cursor: not-allowed; }
         #estado { text-align: center; margin: 8px 0 0; font-size: 0.85em; color: #aaa; min-height: 20px; }
 
-        /* Visualización */
-        #visualizacion { display: none; }
-        #controles { background: #16213e; border-radius: 12px; padding: 20px; max-width: 520px; margin: 0 auto 24px; text-align: center; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
-        #controles h3 { margin-bottom: 14px; color: #a8d8ea; }
-        #infoTurno { font-size: 1.3em; color: #7ec8e3; font-weight: bold; margin-bottom: 10px; }
-        #slider { width: 100%; cursor: pointer; accent-color: #e94560; }
-        #botonesNav { margin-top: 12px; display: flex; justify-content: center; gap: 12px; }
-        #botonesNav button { padding: 8px 20px; border-radius: 8px; border: none; background: #0f3460; color: #fff; cursor: pointer; font-size: 1em; }
-        #botonesNav button:hover { background: #7ec8e3; color: #1a1a2e; }
-        #descripcion { margin-top: 10px; font-size: 0.85em; color: #aaa; min-height: 18px; }
-
-        #tableroWrap { overflow-x: auto; margin-bottom: 30px; }
-        table#tablero { border-collapse: collapse; margin: 0 auto; }
-        table#tablero td { width: 36px; height: 36px; border: 1px solid #2a2a4a; transition: background-color 0.15s; }
-
-        /* Leyenda de colores */
-        #leyendaColores { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; margin-bottom: 20px; font-size: 0.82em; }
-        .item-leyenda { display: flex; align-items: center; gap: 6px; }
-        .caja { width: 18px; height: 18px; border-radius: 3px; border: 1px solid #444; flex-shrink: 0; }
     </style>
 </head>
 <body>
@@ -55,54 +36,22 @@
 <div id="formulario">
     <h2>Configurar partida</h2>
     <div class="campo">
-        <label>🟦 Alfa — Submarinos (tamaño 1)</label>
+        <label>🟩 Alfa — Submarinos (tamaño 1)</label>
         <input type="number" id="alfa" min="0" max="8" value="2">
     </div>
     <div class="campo">
-        <label>🟩 Beta — Destructores (tamaño 2)</label>
+        <label>🟣 Beta — Destructores (tamaño 2)</label>
         <input type="number" id="beta" min="0" max="5" value="2">
     </div>
     <div class="campo">
-        <label>🟥 Gamma — Cruceros (tamaño 3)</label>
+        <label>🔵 Gamma — Cruceros (tamaño 3)</label>
         <input type="number" id="gamma" min="0" max="3" value="1">
     </div>
     <button id="btnSimular" onclick="simular()">▶ Simular partida</button>
     <div id="estado"></div>
 </div>
 
-<!-- Visualización -->
-<div id="visualizacion">
-    <div id="leyendaColores">
-        <div class="item-leyenda"><div class="caja" style="background:#4488cc"></div> Agua</div>
-        <div class="item-leyenda"><div class="caja" style="background:#808080"></div> Barco</div>
-        <div class="item-leyenda"><div class="caja" style="background:#99ccff"></div> Fallo</div>
-        <div class="item-leyenda"><div class="caja" style="background:orange"></div> Tocado</div>
-        <div class="item-leyenda"><div class="caja" style="background:#cc0000"></div> Hundido</div>
-    </div>
-
-    <div id="controles">
-        <h3>Reproducción de la partida</h3>
-        <div id="infoTurno">Turno 0</div>
-        <input type="range" id="slider" min="0" value="0">
-        <div id="botonesNav">
-            <button onclick="cambiarTurno(-1)">◀ Anterior</button>
-            <button onclick="autoPlay()">⏵ Auto</button>
-            <button onclick="cambiarTurno(1)">Siguiente ▶</button>
-        </div>
-        <div id="descripcion"></div>
-    </div>
-
-    <div id="tableroWrap">
-        <table id="tablero"></table>
-    </div>
-</div>
-
 <script>
-    let turnosData = {};
-    let maxTurno = 0;
-    let turnoActual = 0;
-    let autoInterval = null;
-
     async function simular() {
         const alfa  = parseInt(document.getElementById('alfa').value)  || 0;
         const beta  = parseInt(document.getElementById('beta').value)  || 0;
@@ -113,111 +62,22 @@
         document.getElementById('estado').textContent = 'Simulando partida...';
 
         try {
-            // Paso 1: solicitar simulación
-            const r1 = await fetch('/Solicitud/Solicitar?nombreUsuario=Test', {
+            const resp = await fetch('/Solicitud/Solicitar?nombreUsuario=Test', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nums: { 1: alfa, 2: beta, 3: gamma } })
             });
-            const j1 = await r1.json();
-            const token = j1.tokenSolicitud;
-            document.getElementById('estado').textContent = `Token recibido: ${token}. Descargando datos...`;
-
-            // Paso 2: descargar datos
-            const r2 = await fetch(`/Resultados?nombreUsuario=Test&tok=${token}`, { method: 'POST' });
-            const j2 = await r2.json();
-
-            if (!j2.done || !j2.data) {
-                document.getElementById('estado').textContent = 'Error: simulación no completada.';
+            const json = await resp.json();
+            if (!resp.ok || !json.done) {
+                document.getElementById('estado').textContent = json.errorMessage || 'Error al simular la partida.';
                 btn.disabled = false;
                 return;
             }
-
-            parsearYMostrar(j2.data);
-            document.getElementById('estado').textContent = `Partida completada en ${maxTurno} turnos.`;
+            window.location.href = '/juego/token?tok=' + json.tokenSolicitud;
         } catch (e) {
             document.getElementById('estado').textContent = 'Error de conexión: ' + e.message;
             btn.disabled = false;
         }
-    }
-
-    function parsearYMostrar(rawData) {
-        const lineas = rawData.split('\n');
-        const tamano = parseInt(lineas[0]);
-        turnosData = {};
-        maxTurno = 0;
-
-        for (let i = 1; i < lineas.length; i++) {
-            const trozos = lineas[i].split(',');
-            if (trozos.length < 4) continue;
-            const t = parseInt(trozos[0]);
-            const y = parseInt(trozos[1]);
-            const x = parseInt(trozos[2]);
-            const color = trozos[3].trim();
-            if (t > maxTurno) maxTurno = t;
-            if (!turnosData[t]) turnosData[t] = [];
-            turnosData[t].push({ x, y, color });
-        }
-
-        const slider = document.getElementById('slider');
-        slider.max = maxTurno;
-        slider.value = 0;
-        slider.oninput = () => irATurno(parseInt(slider.value));
-
-        construirEstructuraTabla(tamano);
-        document.getElementById('visualizacion').style.display = 'block';
-        document.getElementById('formulario').style.marginBottom = '16px';
-        irATurno(0);
-    }
-
-    function construirEstructuraTabla(tam) {
-        const tabla = document.getElementById('tablero');
-        let html = '';
-        for (let f = 0; f < tam; f++) {
-            html += '<tr>';
-            for (let c = 0; c < tam; c++) {
-                html += `<td id="c_${f}_${c}"></td>`;
-            }
-            html += '</tr>';
-        }
-        tabla.innerHTML = html;
-    }
-
-    function irATurno(t) {
-        turnoActual = t;
-        document.getElementById('slider').value = t;
-        const celdas = turnosData[t] || [];
-        celdas.forEach(({ x, y, color }) => {
-            const td = document.getElementById(`c_${y}_${x}`);
-            if (td) td.style.backgroundColor = color;
-        });
-
-        // Contar hundidos
-        const hundidos = celdas.filter(c => c.color === '#cc0000').length;
-        const tocados  = celdas.filter(c => c.color === 'orange').length;
-        const fallos   = celdas.filter(c => c.color === '#99ccff').length;
-
-        let desc = t === 0 ? 'Estado inicial — barcos colocados' :
-                   `Disparo ${t}`;
-        if (hundidos > 0) desc += ` · ${hundidos} celdas hundidas 🔴`;
-        if (tocados  > 0) desc += ` · ${tocados} tocadas 🟠`;
-        if (fallos   > 0) desc += ` · ${fallos} fallos 🔵`;
-        document.getElementById('descripcion').textContent = desc;
-        document.getElementById('infoTurno').textContent = `Turno ${t} / ${maxTurno}`;
-    }
-
-    function cambiarTurno(delta) {
-        const nuevo = Math.max(0, Math.min(maxTurno, turnoActual + delta));
-        irATurno(nuevo);
-    }
-
-    function autoPlay() {
-        if (autoInterval) { clearInterval(autoInterval); autoInterval = null; return; }
-        irATurno(0);
-        autoInterval = setInterval(() => {
-            if (turnoActual >= maxTurno) { clearInterval(autoInterval); autoInterval = null; return; }
-            cambiarTurno(1);
-        }, 120);
     }
 </script>
 </body>

@@ -77,4 +77,12 @@ class VistaGraficaControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("accesoDenegado"));
     }
+
+    @Test
+    @WithMockUser
+    void inicio_DebeCargarLaPaginaDeInicio() throws Exception {
+        mockMvc.perform(get("/"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("inicio"));
+    }
 }

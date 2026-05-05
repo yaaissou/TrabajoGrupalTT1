@@ -3,34 +3,46 @@ package com.trabajo.servidor.service;
 import com.trabajo.servidor.model.Barco;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class HundirFlotaServiceImpl implements HundirFlotaService {
 
     private static final int BOARD_SIZE = 10;
+    // Límite de disparos por partida (mitad de la cuadrícula)
+    private static final int DISPAROS_MAX = 50;
 
     private static final String COLOR_AGUA       = "#4488cc";
-    private static final String COLOR_BARCO      = "#808080";
+    private static final String COLOR_ALFA       = "#22c55e"; // Alfa  tamaño 1 — verde
+    private static final String COLOR_BETA       = "#20d06d"; // Beta  tamaño 2 — morado
+    private static final String COLOR_GAMMA      = "#14b8a6"; // Gamma tamaño 3 — teal
     private static final String COLOR_FALLO      = "#99ccff";
     private static final String COLOR_TOCADO     = "orange";
     private static final String COLOR_HUNDIDO    = "#cc0000";
 
-    private final ConcurrentHashMap<Integer, String> partidas = new ConcurrentHashMap<>();
-    private final AtomicInteger tokenCounter = new AtomicInteger(1);
+    private final ConcurrentHashMap<String, String> partidas = new ConcurrentHashMap<>();
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+
+    private String generateToken() {
+        byte[] bytes = new byte[32];
+        SECURE_RANDOM.nextBytes(bytes);
+        StringBuilder sb = new StringBuilder(64);
+        for (byte b : bytes) sb.append(String.format("%02x", b));
+        return sb.toString();
+    }
 
     @Override
-    public int simularPartida(Map<Integer, Integer> nums) {
-        int token = tokenCounter.getAndIncrement();
+    public String simularPartida(Map<Integer, Integer> nums) {
+        String token = generateToken();
         String rawData = ejecutarSimulacion(nums);
         partidas.put(token, rawData);
         return token;
     }
 
     @Override
-    public String obtenerRawData(int token) {
+    public String obtenerRawData(String token) {
         return partidas.getOrDefault(token, null);
     }
 
@@ -100,7 +112,8 @@ public class HundirFlotaServiceImpl implements HundirFlotaService {
             if (todosHundidos(barcos)) break;
         }
 
-        return construirRawData(BOARD_SIZE, turnoFinal, ocupado, barcos, disparos, turnoFinal);
+        boolean victoria = todosHundidos(barcos);
+        return construirRawData(BOARD_SIZE, barcos, disparos, turnoFinal, victoria);
     }
 
     private List<Barco> colocarBarcos(List<Integer> tamanos, boolean[][] ocupado, Random rand) {
@@ -144,7 +157,7 @@ public class HundirFlotaServiceImpl implements HundirFlotaService {
             for (int c = 0; c < BOARD_SIZE; c++)
                 todas.add(new int[]{r, c});
         Collections.shuffle(todas, rand);
-        return todas;
+        return todas.subList(0, Math.min(DISPAROS_MAX, todas.size()));
     }
 
     private Barco buscarBarco(List<Barco> barcos, int r, int c) {
@@ -167,16 +180,19 @@ public class HundirFlotaServiceImpl implements HundirFlotaService {
 
     /**
      * Reconstruye la simulación turno a turno y genera el string rawData.
-     * Cada turno es un snapshot completo del tablero para que grid.html
-     * pueda mostrarlo de forma independiente al mover el slider.
+     * Formato:
+     *   línea 0 → tamaño del tablero (ej. "10")
+     *   línea 1 → resultado: "WIN" o "LOSE"
+     *   resto   → turno,fila,columna,color  (snapshot completo por turno)
      */
-    private String construirRawData(int size, int turnoFinal,
-                                    boolean[][] ocupadoInicial,
+    private String construirRawData(int size,
                                     List<Barco> barcos,
                                     List<int[]> disparos,
-                                    int numTurnos) {
+                                    int numTurnos,
+                                    boolean victoria) {
         StringBuilder sb = new StringBuilder();
         sb.append(size).append("\n");
+        sb.append(victoria ? "WIN" : "LOSE").append("\n");
 
         // Mapa de posición de barco: clave "r,c" → Barco
         Map<String, Barco> mapeoPosicion = new HashMap<>();
@@ -230,7 +246,7 @@ public class HundirFlotaServiceImpl implements HundirFlotaService {
                     } else if (fallos.contains(clave)) {
                         color = COLOR_FALLO;
                     } else if (mapeoPosicion.containsKey(clave)) {
-                        color = COLOR_BARCO;
+                        color = colorBarco(mapeoPosicion.get(clave).getSize());
                     } else {
                         color = COLOR_AGUA;
                     }
@@ -241,5 +257,11 @@ public class HundirFlotaServiceImpl implements HundirFlotaService {
         }
 
         return sb.toString().trim();
+    }
+
+    private String colorBarco(int size) {
+        if (size == 1) return COLOR_ALFA;
+        if (size == 3) return COLOR_GAMMA;
+        return COLOR_BETA;
     }
 }

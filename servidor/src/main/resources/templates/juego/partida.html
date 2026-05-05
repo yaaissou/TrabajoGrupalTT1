@@ -33,6 +33,12 @@
         table#tablero { border-collapse: collapse; margin: 0 auto; }
         table#tablero td { width: 36px; height: 36px; border: 1px solid #2a2a4a; transition: background-color 0.1s; }
 
+        /* Resultado */
+        #resultado { text-align: center; margin-bottom: 20px; font-size: 1.6em; font-weight: bold;
+                     letter-spacing: 2px; padding: 12px 0; border-radius: 10px; }
+        #resultado.win  { background: rgba(56,239,125,0.12); color: #38ef7d; border: 1px solid rgba(56,239,125,0.3); }
+        #resultado.lose { background: rgba(233,69,96,0.12);  color: #e94560; border: 1px solid rgba(233,69,96,0.3); }
+
         /* Volver */
         .nav-footer { text-align: center; margin-top: 24px; }
         .nav-footer a { color: #7ec8e3; text-decoration: none; font-size: 0.85em; margin: 0 12px; }
@@ -46,9 +52,13 @@
     <div class="subtitulo">Token: <span th:text="${tok}">—</span></div>
 </header>
 
+<div id="resultado"></div>
+
 <div id="leyenda">
     <div class="item-leyenda"><div class="caja" style="background:#4488cc"></div> Agua</div>
-    <div class="item-leyenda"><div class="caja" style="background:#808080"></div> Barco</div>
+    <div class="item-leyenda"><div class="caja" style="background:#22c55e"></div> Alfa (tamaño 1)</div>
+    <div class="item-leyenda"><div class="caja" style="background:#a855f7"></div> Beta (tamaño 2)</div>
+    <div class="item-leyenda"><div class="caja" style="background:#14b8a6"></div> Gamma (tamaño 3)</div>
     <div class="item-leyenda"><div class="caja" style="background:#99ccff"></div> Fallo</div>
     <div class="item-leyenda"><div class="caja" style="background:orange"></div> Tocado</div>
     <div class="item-leyenda"><div class="caja" style="background:#cc0000"></div> Hundido</div>
@@ -81,13 +91,21 @@
     const texto   = document.getElementById('datosCrudos').innerText.trim();
     const lineas  = texto.split('\n');
     const tamano  = parseInt(lineas[0]) || 10;
+    const resultado = lineas[1] === 'WIN' || lineas[1] === 'LOSE' ? lineas[1] : null;
+
+    // Mostrar banner de resultado
+    if (resultado) {
+        const div = document.getElementById('resultado');
+        div.textContent = resultado === 'WIN' ? '⚓ ¡Victoria! Todos los barcos hundidos' : '💥 Derrota — Quedan barcos en pie';
+        div.classList.add(resultado === 'WIN' ? 'win' : 'lose');
+    }
 
     let turnosData  = {};
     let maxTurno    = 0;
     let turnoActual = 0;
     let autoInterval = null;
 
-    // Parsear datos
+    // Parsear datos (las líneas WIN/LOSE no tienen 4 campos y se omiten automáticamente)
     for (let i = 1; i < lineas.length; i++) {
         const p = lineas[i].split(',');
         if (p.length < 4) continue;
