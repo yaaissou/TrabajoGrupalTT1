@@ -125,27 +125,26 @@ Este documento contiene el registro cronológico de las reuniones de sincronizac
 
 ---
 
-## Acta 06: Revisión de Infraestructura, Testing y Documentación
+## Acta 06: Reorientación Funcional
 * **Fecha:** 12 de Mayo de 2026
 * **Asistentes:** Pablo Ramirez, Marcos Zorzano, Yazid Aissou, Angel Muro.
-* **Tipo de reunión:** Resolución de incidencias técnicas, estabilización del código y generación de manuales.
+* **Tipo de reunión:** Ajuste de requisitos del cliente y validación de cambios en el core.
 
 #### 📝 Orden del Día
-1. Formalización del cambio de roles semanales según lo establecido en `CONTRIBUTING.md`.
-2. Evaluación y resolución de problemas de compilación en el entorno de pruebas y CI/CD (GitHub Actions).
-3. Debate sobre la gestión de modelos de datos (uso de la librería Lombok frente a Vanilla Java).
-4. Revisión de la documentación técnica generada (Javadoc) y empaquetado final del contenedor Docker.
+1. Revisión del feedback del cliente tras la reunión del pasado jueves.
+2. Desestimación de la interfaz gráfica y simplificación del flujo de salida.
+3. Validación de la actualización integral de la documentación técnica (Javadoc).
+4. Rediseño del motor.
 
 #### 🤝 Acuerdos Adoptados
-* **Downgrade a Java 17 (LTS):** Se aprueba por unanimidad bajar la versión del proyecto de Java 23 a Java 17 LTS en el archivo `pom.xml` y en los flujos de GitHub Actions. Esto asegura la compatibilidad total con herramientas de testing como Mockito y otorga mayor estabilidad a largo plazo.
-* **Refactorización de Modelos y Lombok:** Se resolvió el conflicto de dependencias y errores de "clase ya definida" depurando las clases `DatosSolicitud` y `DatosSimulacion` para garantizar la robustez del pipeline en terminal, asegurando que constructores y getters/setters no generen fallos al compilar.
-* **Estabilización de Tests:** Se corrigieron los problemas de inicialización (NullPointerException) en los tests de integración de la vista gráfica (`misionConseguida.html`), logrando que la suite completa de 11 tests pase con éxito en la integración continua.
-* **Documentación Javadoc Integral:** Se acuerda mantener el estándar de calidad en la documentación, utilizando etiquetas HTML y anotaciones oficiales (`@param`, `@return`, `@author`) en toda la capa de Controladores, Modelos, Configuración y clase principal, solventando los problemas de generación de Maven.
-* **Aislamiento en Docker:** Se valida la configuración del `Dockerfile` utilizando la imagen ligera `eclipse-temurin:17-jdk` y corrigiendo las rutas hacia `servidor/target/`, logrando un despliegue local exitoso por el puerto 8080.
+* **Pivotaje hacia Backend-Only:** Tras las indicaciones del cliente, se acuerda oficialmente desestimar el desarrollo de una interfaz gráfica (UI). El proyecto se centrará en la robustez de la lógica interna. El flujo se mantiene en: entrada de 3 parámetros → generación de Token → salida del resultado de la partida (Hundir la Flota) cumpliendo estrictamente con los requisitos.
+* **Actualización y Estabilización de Documentación:** Se valida el trabajo del Redactor (**Marcos**) en la actualización integral del Javadoc, cubriendo las nuevas clases de RabbitMQ y los controladores REST. Se confirma que la documentación es coherente con el código actual y está lista para su despliegue en el sitio estático.
+* **Refactorización de la Lógica de Juego:** Se ha modificado el código para que el juego deje de ser una interacción individual. Ahora el sistema procesa la lógica de "Hundir la Flota" de forma interna, preparando el terreno para una simulación competitiva automatizada.
+* **Sincronización de Repositorio:** Se da por resuelto el conflicto de versiones en la rama `main` tras el proceso de *merge* realizado, asegurando que todos los miembros trabajan ahora sobre la versión estable que incluye la documentación y los nuevos controladores.
 
 #### 🚀 Próximos Pasos 
-* **Programador (Angel):** Iniciar el desarrollo de la lógica matemática de simulación real, dado que la arquitectura base y la persistencia en memoria (`ConcurrentHashMap`) ya están validadas.
-* **DevOps (Yazid):** Monitorizar el pipeline automático de GitHub Actions tras la sincronización de ramas (`main` a `early`) y asegurar que los despliegues en contenedores sigan siendo estables con los futuros cambios.
-* **Tester (Pablo):** Diseñar nuevos casos de prueba para cubrir la lógica de negocio y los cálculos matemáticos que el programador implementará en el próximo ciclo, manteniendo el 100% de los tests en verde.
-* **Redactor (Marcos):** Actualizar y expandir el documento `DOCUMENTACION_API.md` con las respuestas y peticiones finales, y volver a compilar el sitio web estático de Javadoc (`mvn javadoc:javadoc`) si se añaden nuevas clases.
+* **Programador (Angel):** Evolucionar el motor de juego para que pase de ser individual a una simulación de dos jugadores (Jugador 1 vs Jugador 2). La partida debe ser totalmente automática, simulando un proceso de toma de decisiones o "IA" interna sin intervención del cliente.
+* **DevOps (Yazid):** Iniciar la investigación y configuración de una base de datos NoSQL.
+* **Tester (Pablo):** Adaptar la suite de pruebas unitarias para validar que el juego automático se desarrolla correctamente y que no hay bucles infinitos en la "lógica de pensamiento" de la simulación.
+* **Redactor (Marcos):** Documentar en el `DOCUMENTACION_API.md` los nuevos parámetros de entrada y el formato de la salida de texto de la simulación automática, eliminando cualquier referencia a la interfaz gráfica anterior.
 
