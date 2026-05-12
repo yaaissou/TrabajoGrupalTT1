@@ -18,20 +18,30 @@ class HundirFlotaServiceImplTest {
     }
 
     // -----------------------------------------------------------------------
+    // generarToken
+    // -----------------------------------------------------------------------
+
+    @Test
+    void generarToken_DebeDevolverId_Incremental() {
+        int t1 = service.generarToken();
+        int t2 = service.generarToken();
+        assertTrue(t1 > 0, "El primer token debe ser positivo");
+        assertEquals(t1 + 1, t2, "Los tokens deben ser incrementales");
+    }
+
+    // -----------------------------------------------------------------------
     // simularPartida
     // -----------------------------------------------------------------------
 
     @Test
-    void simularPartida_DebeDevolverTokenNoVacio() {
+    void simularPartida_DebeDevolverTokenPositivo() {
         Map<Integer, Integer> nums = new HashMap<>();
         nums.put(1, 2);
         nums.put(2, 1);
 
-        String token = service.simularPartida(nums);
+        int token = service.simularPartida(nums);
 
-        assertNotNull(token, "El token no debe ser null");
-        assertFalse(token.isBlank(), "El token no debe estar vacío");
-        assertEquals(64, token.length(), "El token debe tener 64 caracteres hexadecimales");
+        assertTrue(token > 0, "El token debe ser un entero positivo");
     }
 
     @Test
@@ -39,7 +49,7 @@ class HundirFlotaServiceImplTest {
         Map<Integer, Integer> nums = new HashMap<>();
         nums.put(1, 1);
 
-        String token = service.simularPartida(nums);
+        int token = service.simularPartida(nums);
 
         assertNotNull(service.obtenerRawData(token), "Los datos de la partida no deben ser null tras simular");
     }
@@ -49,8 +59,8 @@ class HundirFlotaServiceImplTest {
         Map<Integer, Integer> nums = new HashMap<>();
         nums.put(1, 1);
 
-        String token1 = service.simularPartida(nums);
-        String token2 = service.simularPartida(nums);
+        int token1 = service.simularPartida(nums);
+        int token2 = service.simularPartida(nums);
 
         assertNotEquals(token1, token2, "Cada nueva partida debe recibir un token único");
     }
@@ -60,20 +70,19 @@ class HundirFlotaServiceImplTest {
         Map<Integer, Integer> nums = new HashMap<>();
         nums.put(1, 1);
 
-        String token1 = service.simularPartida(nums);
-        String token2 = service.simularPartida(nums);
+        int token1 = service.simularPartida(nums);
+        int token2 = service.simularPartida(nums);
 
-        assertNotEquals(token1, token2, "Dos partidas distintas deben tener tokens distintos");
+        assertNotEquals(token1, token2);
         assertNotNull(service.obtenerRawData(token1));
         assertNotNull(service.obtenerRawData(token2));
     }
 
     @Test
     void simularPartida_SinBarcos_DebeUsarBarcosPorDefecto() {
-        // Map vacío → el servicio añade un barco de tamaño 2 por defecto
         Map<Integer, Integer> nums = new HashMap<>();
 
-        String token = service.simularPartida(nums);
+        int token = service.simularPartida(nums);
 
         assertNotNull(service.obtenerRawData(token), "Incluso sin barcos debe generarse una partida");
     }
@@ -87,12 +96,11 @@ class HundirFlotaServiceImplTest {
         Map<Integer, Integer> nums = new HashMap<>();
         nums.put(2, 2);
 
-        String token = service.simularPartida(nums);
+        int token = service.simularPartida(nums);
         String rawData = service.obtenerRawData(token);
 
         assertNotNull(rawData);
-        String primeraLinea = rawData.split("\n")[0];
-        assertEquals("10", primeraLinea, "La primera línea del rawData debe ser '10' (tamaño del tablero)");
+        assertEquals("10", rawData.split("\n")[0]);
     }
 
     @Test
@@ -100,12 +108,12 @@ class HundirFlotaServiceImplTest {
         Map<Integer, Integer> nums = new HashMap<>();
         nums.put(1, 1);
 
-        String token = service.simularPartida(nums);
+        int token = service.simularPartida(nums);
         String rawData = service.obtenerRawData(token);
 
         assertNotNull(rawData);
         String[] lineas = rawData.split("\n");
-        assertTrue(lineas.length > 1, "El rawData debe tener al menos 2 líneas de cabecera");
+        assertTrue(lineas.length > 1);
         assertTrue(lineas[1].equals("WIN") || lineas[1].equals("LOSE"),
                 "La segunda línea debe ser 'WIN' o 'LOSE', fue: " + lineas[1]);
     }
@@ -115,16 +123,14 @@ class HundirFlotaServiceImplTest {
         Map<Integer, Integer> nums = new HashMap<>();
         nums.put(1, 1);
 
-        String token = service.simularPartida(nums);
+        int token = service.simularPartida(nums);
         String rawData = service.obtenerRawData(token);
 
         assertNotNull(rawData);
         String[] lineas = rawData.split("\n");
-        // Línea 0 = tamaño, línea 1 = WIN/LOSE, línea 2 = primer dato
-        assertTrue(lineas.length > 2, "El rawData debe tener datos tras las dos líneas de cabecera");
-
-        String[] partes = lineas[2].split(",");
-        assertEquals(4, partes.length, "Cada línea de datos debe tener 4 campos: turno,fila,columna,color");
+        assertTrue(lineas.length > 2);
+        assertEquals(4, lineas[2].split(",").length,
+                "Cada línea de datos debe tener 4 campos: turno,fila,columna,color");
     }
 
     @Test
@@ -132,7 +138,7 @@ class HundirFlotaServiceImplTest {
         Map<Integer, Integer> nums = new HashMap<>();
         nums.put(1, 1);
 
-        String token = service.simularPartida(nums);
+        int token = service.simularPartida(nums);
         String rawData = service.obtenerRawData(token);
 
         assertNotNull(rawData);
@@ -142,14 +148,13 @@ class HundirFlotaServiceImplTest {
     @Test
     void rawData_ConBarcos_DebeContenerColorDeBarco() {
         Map<Integer, Integer> nums = new HashMap<>();
-        nums.put(3, 1); // un crucero de tamaño 3
+        nums.put(3, 1);
 
-        String token = service.simularPartida(nums);
+        int token = service.simularPartida(nums);
         String rawData = service.obtenerRawData(token);
 
         assertNotNull(rawData);
-        // El turno 0 (estado inicial) debe mostrar los barcos
-        assertTrue(rawData.contains("#808080"), "El tablero debe contener celdas de barco (#808080) en el turno inicial");
+        assertTrue(rawData.contains("#14b8a6"), "El tablero debe contener celdas de barco Gamma (#14b8a6)");
     }
 
     // -----------------------------------------------------------------------
@@ -158,8 +163,6 @@ class HundirFlotaServiceImplTest {
 
     @Test
     void obtenerRawData_ConTokenInexistente_DebeRetornarNull() {
-        String resultado = service.obtenerRawData("0000000000000000000000000000000000000000000000000000000000000000");
-
-        assertNull(resultado, "Un token que no existe debe devolver null");
+        assertNull(service.obtenerRawData(99999), "Un token que no existe debe devolver null");
     }
 }

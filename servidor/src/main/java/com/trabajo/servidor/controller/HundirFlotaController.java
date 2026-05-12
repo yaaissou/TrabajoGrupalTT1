@@ -1,8 +1,11 @@
 package com.trabajo.servidor.controller;
 
+import com.trabajo.servidor.config.RabbitMQConfig;
 import com.trabajo.servidor.model.BattleshipRequest;
 import com.trabajo.servidor.model.BattleshipResponse;
+import com.trabajo.servidor.model.SimulacionMensaje;
 import com.trabajo.servidor.service.HundirFlotaService;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,22 +14,21 @@ import java.util.Map;
 @RestController
 public class HundirFlotaController {
 
-    private final HundirFlotaService hundirFlotaService;
+    private static final int MAX_CELDAS = 50;
 
-    public HundirFlotaController(HundirFlotaService hundirFlotaService) {
+    private final HundirFlotaService hundirFlotaService;
+    private final RabbitTemplate rabbitTemplate;
+
+    public HundirFlotaController(HundirFlotaService hundirFlotaService, RabbitTemplate rabbitTemplate) {
         this.hundirFlotaService = hundirFlotaService;
+        this.rabbitTemplate = rabbitTemplate;
     }
 
     /**
-     * Recibe la solicitud del trabajo-individual, ejecuta la simulación
-     * y devuelve el token entero que el cliente usará para recuperar los datos.
-     *
-     * Llamado por ServicioSolicitudes.solicitarSimulation()
      * POST http://localhost:8080/Solicitud/Solicitar?nombreUsuario=Marcos
      * Body: {"nums": {"1": n1, "2": n2, "3": n3}}
+     * Respuesta: {"done": true, "tokenSolicitud": 42}
      */
-    private static final int MAX_CELDAS = 50;
-
     @PostMapping("/Solicitud/Solicitar")
     public ResponseEntity<BattleshipResponse> solicitarSimulacion(
             @RequestParam(value = "nombreUsuario", required = false) String nombreUsuario,
@@ -53,7 +55,8 @@ public class HundirFlotaController {
             return ResponseEntity.badRequest().body(err);
         }
 
-        String token = hundirFlotaService.simularPartida(nums);
+        int token = hundirFlotaService.generarToken();
+        rabbitTemplate.convertAndSend(RabbitMQConfig.QUEUE_NAME, new SimulacionMensaje(token, nums));
 
         BattleshipResponse response = new BattleshipResponse();
         response.setDone(true);
@@ -63,16 +66,13 @@ public class HundirFlotaController {
     }
 
     /**
-     * Devuelve el rawData de la simulación para que grid.html la visualice.
-     *
-     * Llamado por ServicioSolicitudes.descargarDatos()
-     * POST http://localhost:8080/Resultados?nombreUsuario=Marcos&tok={token}
-     * Body: null
+     * POST http://localhost:8080/Resultados?nombreUsuario=Marcos&tok=42
+     * Respuesta: {"done": true, "tokenSolicitud": 42, "data": "10\nWIN\n..."}
      */
     @PostMapping("/Resultados")
     public ResponseEntity<BattleshipResponse> obtenerResultados(
             @RequestParam(value = "nombreUsuario", required = false) String nombreUsuario,
-            @RequestParam("tok") String tok) {
+            @RequestParam("tok") int tok) {
 
         String rawData = hundirFlotaService.obtenerRawData(tok);
 

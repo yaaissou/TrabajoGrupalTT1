@@ -18,13 +18,13 @@ public class JuegoController {
     }
 
     @GetMapping("/token")
-    public String mostrarToken(@RequestParam("tok") String tok, Model model) {
+    public String mostrarToken(@RequestParam("tok") int tok, Model model) {
         model.addAttribute("token", tok);
         return "juego/token";
     }
 
     @GetMapping("/partida")
-    public String mostrarPartida(@RequestParam("tok") String tok, Model model) {
+    public String mostrarPartida(@RequestParam("tok") int tok, Model model) {
         String rawData = hundirFlotaService.obtenerRawData(tok);
         if (rawData == null) {
             model.addAttribute("error", "Token " + tok + " no encontrado.");

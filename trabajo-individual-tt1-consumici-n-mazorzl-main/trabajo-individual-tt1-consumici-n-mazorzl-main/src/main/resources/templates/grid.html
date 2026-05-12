@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado de la Simulación</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f9f9f9; }
+        h2 { text-align: center; color: #333; }
+
+        /* Contenedor de los controles */
+        .controles { text-align: center; margin: 20px auto; background: white; padding: 15px; border-radius: 8px; width: 350px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .controles input { width: 100%; margin-top: 10px; }
+
+        /* El tablero */
+        table { border-collapse: collapse; margin: 0 auto; background: white; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        td { width: 30px; height: 30px; border: 1px solid #ddd; }
+    </style>
+</head>
+<body>
+
+<h2>Simulación Completada</h2>
+
+<!-- Controles para viajar en el tiempo -->
+<div class="controles">
+    <label><strong>Turno Actual: </strong> <span id="turnoTexto" style="color: #007bff; font-size: 1.2em;">0</span></label><br>
+    <input type="range" id="rangoTurno" min="0" value="0">
+</div>
+
+<!-- El texto oculto de Java -->
+<div id="datosCrudos" style="display:none;" th:text="${datosGrid}"></div>
+
+<!-- El tablero HTML -->
+<table id="tablero"></table>
+
+<script>
+    // 1. Leer los datos
+    const texto = document.getElementById("datosCrudos").innerText.trim();
+    const lineas = texto.split("\n");
+
+    // 2. La primera línea es el tamaño del grid (ej: 12)
+    let tamanoGrid = parseInt(lineas[0]);
+    if (isNaN(tamanoGrid) || lineas[0].includes(",")) {
+        tamanoGrid = 15; // Tamaño por defecto por si falla
+    }
+
+    let maxTurno = 0;
+    let turnosData = {}; // Guardaremos las coordenadas separadas por turno
+
+    // 3. Procesar el texto y organizarlo por turnos
+    for (let i = 1; i < lineas.length; i++) { // Empezamos en 1 para saltar la línea del tamaño
+        let trozos = lineas[i].split(",");
+        if (trozos.length >= 4) {
+            let turno = parseInt(trozos[0]);
+            let y = parseInt(trozos[1]); // Fila
+            let x = parseInt(trozos[2]); // Columna
+            let color = trozos[3].trim(); // Color
+
+            if (turno > maxTurno) maxTurno = turno;
+
+            // Si el turno no existe en nuestro objeto, lo creamos
+            if (!turnosData[turno]) {
+                turnosData[turno] = [];
+            }
+            // Añadimos la celda a ese turno
+            turnosData[turno].push({ x: x, y: y, color: color });
+        }
+    }
+
+    // 4. Configurar la barra deslizante
+    const slider = document.getElementById("rangoTurno");
+    slider.max = maxTurno;
+
+    // 5. Función que dibuja el tablero según el turno elegido
+    function dibujarTablero(turno) {
+        document.getElementById("turnoTexto").innerText = turno;
+        let celdasAColorear = turnosData[turno] || [];
+
+        let htmlTabla = "";
+        for (let fila = 0; fila < tamanoGrid; fila++) {
+            htmlTabla += "<tr>";
+            for (let columna = 0; columna < tamanoGrid; columna++) {
+                let colorFondo = "white"; // Blanco por defecto
+
+                // Comprobamos si hay color en esta coordenada en este turno
+                for (let c = 0; c < celdasAColorear.length; c++) {
+                    if (celdasAColorear[c].x === columna && celdasAColorear[c].y === fila) {
+                        colorFondo = celdasAColorear[c].color;
+                    }
+                }
+                htmlTabla += "<td style='background-color: " + colorFondo + ";'></td>";
+            }
+            htmlTabla += "</tr>";
+        }
+        document.getElementById("tablero").innerHTML = htmlTabla;
+    }
+
+    // Dibujar el tablero por primera vez en el turno 0
+    dibujarTablero(0);
+
+    // Cuando el usuario mueva la barra, actualizar el tablero en tiempo real
+    slider.addEventListener("input", function() {
+        dibujarTablero(parseInt(this.value));
+    });
+
+</script>
+</body>
+</html>

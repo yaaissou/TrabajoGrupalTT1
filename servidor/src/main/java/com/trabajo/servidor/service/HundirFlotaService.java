@@ -4,7 +4,11 @@ import java.util.Map;
 
 public interface HundirFlotaService {
 
-    String simularPartida(Map<Integer, Integer> nums);
+    int generarToken();
 
-    String obtenerRawData(String token);
+    int simularPartida(Map<Integer, Integer> nums);
+
+    void procesarSolicitud(int token, Map<Integer, Integer> nums);
+
+    String obtenerRawData(int token);
 }

@@ -1,6 +1,7 @@
-package com.trabajo.servidor.model;
+package com.tt1.trabajo.modelo;
 
-public class BattleshipResponse {
+public class ResultsResponse {
+
 
     private boolean done;
     private int tokenSolicitud;
