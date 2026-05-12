@@ -4,36 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="be1768af-7036-4389-8e28-244df1e092a0" name="Changes" comment="tests hechos">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_04_2026_16_48_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_14_04_2026_16_48__Changes_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/config/RabbitMQConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/config/RabbitMQConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/config/SecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/config/SecurityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/controller/HundirFlotaController.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/controller/HundirFlotaController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/controller/JuegoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/controller/JuegoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/messaging/SimulacionListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/messaging/SimulacionListener.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/Barco.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/Barco.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/DatosSolicitud.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/DatosSolicitud.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/SimulacionMensaje.java" beforeDir="false" afterPath="$PROJECT_DIR$/servidor/src/main/java/com/trabajo/servidor/model/SimulacionMensaje.java" afterDir="false" />
-    </list>
+    <list default="true" id="be1768af-7036-4389-8e28-244df1e092a0" name="Changes" comment="tests hechos" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="165" />
+    <option name="cachedIndexableFilesCount" value="35" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
-  </component>
-  <component name="MavenImportPreferences">
-    <option name="generalSettings">
-      <MavenGeneralSettings>
-        <option name="mavenHomeTypeForPersistence" value="WRAPPER" />
-      </MavenGeneralSettings>
-    </option>
   </component>
   <component name="McpProjectServerCommands">
     <commands />
@@ -50,15 +31,14 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Maven.servidor [javadoc:javadoc].executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
     "git-widget-placeholder": "main",
+    "ignore.virus.scanning.warn.message": "true",
     "junie.onboarding.icon.badge.shown": "true",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
@@ -74,16 +54,6 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager">
-    <configuration name="ServidorApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
-      <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources" />
-      <module name="servidor" />
-      <option name="SPRING_BOOT_MAIN_CLASS" value="com.trabajo.servidor.ServidorApplication" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -101,7 +71,7 @@
       <updated>1776178024619</updated>
       <workItem from="1776178031526" duration="381000" />
       <workItem from="1776778107008" duration="1073000" />
-      <workItem from="1778592920670" duration="3194000" />
+      <workItem from="1776781258563" duration="303000" />
     </task>
     <task id="LOCAL-00001" summary="tests hechos">
       <option name="closed" value="true" />
