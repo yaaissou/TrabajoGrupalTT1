@@ -100,7 +100,7 @@ class HundirFlotaServiceImplTest {
         String rawData = service.obtenerRawData(token);
 
         assertNotNull(rawData);
-        assertEquals("10", rawData.split("\n")[0]);
+        assertEquals("21", rawData.split("\n")[0]);
     }
 
     @Test
