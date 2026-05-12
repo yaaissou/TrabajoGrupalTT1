@@ -14,7 +14,8 @@ import java.util.Map;
 @RestController
 public class HundirFlotaController {
 
-    private static final int MAX_CELDAS = 50;
+    // Límite por lado: mitad de 21 filas × 10 columnas = 105
+    private static final int MAX_CELDAS = 105;
 
     private final HundirFlotaService hundirFlotaService;
     private final RabbitTemplate rabbitTemplate;

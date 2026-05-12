@@ -10,8 +10,18 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Service
 public class HundirFlotaServiceImpl implements HundirFlotaService {
 
-    private static final int BOARD_SIZE = 10;
-    private static final int DISPAROS_MAX = 50;
+    // Tablero cuadrado 21x21
+    // Lado A (jugador A): filas 0-20, cols 0-9
+    // Muralla:            filas 0-20, col  10
+    // Lado B (jugador B): filas 0-20, cols 11-20
+    private static final int BOARD_SIZE  = 21;
+    private static final int SIDE_ROWS   = 21;
+    private static final int SIDE_COLS   = 10;
+    private static final int WALL_COL    = 10;
+    private static final int A_COL_START = 0;
+    private static final int A_COL_END   = 9;
+    private static final int B_COL_START = 11;
+    private static final int B_COL_END   = 20;
 
     private static final String COLOR_AGUA    = "#4488cc";
     private static final String COLOR_ALFA    = "#22c55e";
@@ -20,6 +30,7 @@ public class HundirFlotaServiceImpl implements HundirFlotaService {
     private static final String COLOR_FALLO   = "#99ccff";
     private static final String COLOR_TOCADO  = "orange";
     private static final String COLOR_HUNDIDO = "#cc0000";
+    private static final String COLOR_MURALLA = "#222222";
 
     private final ConcurrentHashMap<Integer, String> partidas = new ConcurrentHashMap<>();
     private final AtomicInteger tokenCounter = new AtomicInteger(1);
@@ -46,120 +57,116 @@ public class HundirFlotaServiceImpl implements HundirFlotaService {
         return partidas.getOrDefault(token, null);
     }
 
+    // -------------------------------------------------------------------------
+    // Simulación 1 vs 1
+    // -------------------------------------------------------------------------
+
     private String ejecutarSimulacion(Map<Integer, Integer> nums) {
         int nAlfa  = nums.getOrDefault(1, 0);
         int nBeta  = nums.getOrDefault(2, 0);
         int nGamma = nums.getOrDefault(3, 0);
 
-        int maxCeldas = (int)(BOARD_SIZE * BOARD_SIZE * 0.5);
+        int maxCeldas = SIDE_ROWS * SIDE_COLS / 2;
         List<Integer> tamanos = new ArrayList<>();
-        int totalCeldas = 0;
-        for (int i = 0; i < nAlfa  && totalCeldas + 1 <= maxCeldas; i++) { tamanos.add(1); totalCeldas += 1; }
-        for (int i = 0; i < nBeta  && totalCeldas + 2 <= maxCeldas; i++) { tamanos.add(2); totalCeldas += 2; }
-        for (int i = 0; i < nGamma && totalCeldas + 3 <= maxCeldas; i++) { tamanos.add(3); totalCeldas += 3; }
-
-        if (tamanos.isEmpty()) {
-            tamanos.add(2);
-        }
+        int total = 0;
+        for (int i = 0; i < nAlfa  && total + 1 <= maxCeldas; i++) { tamanos.add(1); total += 1; }
+        for (int i = 0; i < nBeta  && total + 2 <= maxCeldas; i++) { tamanos.add(2); total += 2; }
+        for (int i = 0; i < nGamma && total + 3 <= maxCeldas; i++) { tamanos.add(3); total += 3; }
+        if (tamanos.isEmpty()) tamanos.add(2);
 
         Random rand = new Random();
-        boolean[][] ocupado = new boolean[BOARD_SIZE][BOARD_SIZE];
-        List<Barco> barcos = colocarBarcos(tamanos, ocupado, rand);
 
-        int[][] estado = new int[BOARD_SIZE][BOARD_SIZE];
-        for (Barco b : barcos) {
-            for (int[] pos : b.getPositions()) {
-                estado[pos[0]][pos[1]] = 1;
-            }
+        // Colocar los mismos tipos de barcos en cada lado (posiciones aleatorias)
+        List<Barco> barcosA = colocarBarcos(tamanos, rand, 0, SIDE_ROWS - 1, A_COL_START, A_COL_END);
+        List<Barco> barcosB = colocarBarcos(tamanos, rand, 0, SIDE_ROWS - 1, B_COL_START, B_COL_END);
+
+        // Estado de celdas: 0=agua 1=barco -1=fallo -2=tocado -3=hundido
+        // Índice local: estadoX[fila][col - colOffset]
+        int[][] estadoA = new int[SIDE_ROWS][SIDE_COLS];
+        int[][] estadoB = new int[SIDE_ROWS][SIDE_COLS];
+
+        for (Barco b : barcosA)
+            for (int[] p : b.getPositions())
+                estadoA[p[0]][p[1] - A_COL_START] = 1;
+
+        for (Barco b : barcosB)
+            for (int[] p : b.getPositions())
+                estadoB[p[0]][p[1] - B_COL_START] = 1;
+
+        // Mapa coords absolutas → barco (para buscar impactos)
+        Map<String, Barco> mapeoA = buildMapeo(barcosA);
+        Map<String, Barco> mapeoB = buildMapeo(barcosB);
+
+        // Mapas de color de barco para los snapshots
+        Map<String, String> colorMapA = buildColorMap(barcosA);
+        Map<String, String> colorMapB = buildColorMap(barcosB);
+
+        // Disparadores inteligentes
+        // A dispara al lado B; B dispara al lado A
+        IntelligentShooter shooterA = new IntelligentShooter(0, SIDE_ROWS - 1, B_COL_START, B_COL_END, rand);
+        IntelligentShooter shooterB = new IntelligentShooter(0, SIDE_ROWS - 1, A_COL_START, A_COL_END, rand);
+
+        List<String> snaps = new ArrayList<>();
+        snaps.add(buildSnapshot(0, estadoA, colorMapA, estadoB, colorMapB));
+
+        boolean aGana = false;
+        int turno = 0;
+        int maxTurnos = SIDE_ROWS * SIDE_COLS * 2; // límite de seguridad
+
+        bucle:
+        for (int i = 0; i < maxTurnos; i++) {
+            // --- Turno de A ---
+            int[] shotA = shooterA.nextShot();
+            procesarDisparo(shotA[0], shotA[1], barcosB, estadoB, B_COL_START, mapeoB, shooterA);
+            turno++;
+            snaps.add(buildSnapshot(turno, estadoA, colorMapA, estadoB, colorMapB));
+            if (todosHundidos(barcosB)) { aGana = true; break bucle; }
+
+            // --- Turno de B ---
+            int[] shotB = shooterB.nextShot();
+            procesarDisparo(shotB[0], shotB[1], barcosA, estadoA, A_COL_START, mapeoA, shooterB);
+            turno++;
+            snaps.add(buildSnapshot(turno, estadoA, colorMapA, estadoB, colorMapB));
+            if (todosHundidos(barcosA)) { aGana = false; break bucle; }
         }
 
-        List<int[]> disparos = generarDisparos(rand);
+        StringBuilder sb = new StringBuilder();
+        sb.append(BOARD_SIZE).append("\n");
+        sb.append(aGana ? "WIN" : "LOSE").append("\n");
+        for (String snap : snaps) sb.append(snap);
 
-        Set<String> barcosCeldas = new HashSet<>();
-        for (Barco b : barcos) {
-            for (int[] p : b.getPositions()) barcosCeldas.add(p[0] + "," + p[1]);
-        }
+        return sb.toString().trim();
+    }
 
-        int turnoFinal = 0;
-        for (int t = 0; t < disparos.size(); t++) {
-            int[] disparo = disparos.get(t);
-            int r = disparo[0], c = disparo[1];
+    // -------------------------------------------------------------------------
+    // Helpers de simulación
+    // -------------------------------------------------------------------------
 
-            if (estado[r][c] == 1) {
-                estado[r][c] = -2;
-                Barco barco = buscarBarco(barcos, r, c);
-                if (barco != null && todosTocados(barco, estado)) {
-                    barco.setHundido(true);
-                    for (int[] pos : barco.getPositions()) {
-                        estado[pos[0]][pos[1]] = -3;
-                    }
-                }
+    private void procesarDisparo(int r, int c,
+                                  List<Barco> barcos, int[][] estado, int colOffset,
+                                  Map<String, Barco> mapeo, IntelligentShooter shooter) {
+        Barco barco = mapeo.get(r + "," + c);
+        if (barco != null) {
+            estado[r][c - colOffset] = -2;
+            if (todosTocados(barco, estado, colOffset)) {
+                barco.setHundido(true);
+                for (int[] pos : barco.getPositions())
+                    estado[pos[0]][pos[1] - colOffset] = -3;
+                shooter.recordSunk(r, c);
             } else {
-                estado[r][c] = -1;
+                shooter.recordHit(r, c);
             }
-
-            turnoFinal = t + 1;
-            if (todosHundidos(barcos)) break;
+        } else {
+            estado[r][c - colOffset] = -1;
+            shooter.recordMiss(r, c);
         }
-
-        boolean victoria = todosHundidos(barcos);
-        return construirRawData(BOARD_SIZE, barcos, disparos, turnoFinal, victoria);
     }
 
-    private List<Barco> colocarBarcos(List<Integer> tamanos, boolean[][] ocupado, Random rand) {
-        List<Barco> resultado = new ArrayList<>();
-        int id = 1;
-        for (int tam : tamanos) {
-            int intentos = 0;
-            boolean colocado = false;
-            while (!colocado && intentos < 500) {
-                intentos++;
-                boolean horizontal = rand.nextBoolean();
-                int r = rand.nextInt(BOARD_SIZE);
-                int c = rand.nextInt(BOARD_SIZE);
-
-                List<int[]> celdas = new ArrayList<>();
-                boolean valido = true;
-
-                for (int k = 0; k < tam; k++) {
-                    int nr = horizontal ? r : r + k;
-                    int nc = horizontal ? c + k : c;
-                    if (nr < 0 || nr >= BOARD_SIZE || nc < 0 || nc >= BOARD_SIZE || ocupado[nr][nc]) {
-                        valido = false;
-                        break;
-                    }
-                    celdas.add(new int[]{nr, nc});
-                }
-
-                if (valido) {
-                    for (int[] pos : celdas) ocupado[pos[0]][pos[1]] = true;
-                    resultado.add(new Barco(id++, tam, celdas));
-                    colocado = true;
-                }
-            }
+    private boolean todosTocados(Barco barco, int[][] estado, int colOffset) {
+        for (int[] pos : barco.getPositions()) {
+            int e = estado[pos[0]][pos[1] - colOffset];
+            if (e != -2 && e != -3) return false;
         }
-        return resultado;
-    }
-
-    private List<int[]> generarDisparos(Random rand) {
-        List<int[]> todas = new ArrayList<>();
-        for (int r = 0; r < BOARD_SIZE; r++)
-            for (int c = 0; c < BOARD_SIZE; c++)
-                todas.add(new int[]{r, c});
-        Collections.shuffle(todas, rand);
-        return todas.subList(0, Math.min(DISPAROS_MAX, todas.size()));
-    }
-
-    private Barco buscarBarco(List<Barco> barcos, int r, int c) {
-        for (Barco b : barcos)
-            for (int[] pos : b.getPositions())
-                if (pos[0] == r && pos[1] == c) return b;
-        return null;
-    }
-
-    private boolean todosTocados(Barco barco, int[][] estado) {
-        for (int[] pos : barco.getPositions())
-            if (estado[pos[0]][pos[1]] != -2 && estado[pos[0]][pos[1]] != -3) return false;
         return true;
     }
 
@@ -168,71 +175,169 @@ public class HundirFlotaServiceImpl implements HundirFlotaService {
         return true;
     }
 
-    private String construirRawData(int size, List<Barco> barcos, List<int[]> disparos,
-                                    int numTurnos, boolean victoria) {
+    // -------------------------------------------------------------------------
+    // Construcción de snapshots
+    // -------------------------------------------------------------------------
+
+    private String buildSnapshot(int turno,
+                                  int[][] estadoA, Map<String, String> colorMapA,
+                                  int[][] estadoB, Map<String, String> colorMapB) {
         StringBuilder sb = new StringBuilder();
-        sb.append(size).append("\n");
-        sb.append(victoria ? "WIN" : "LOSE").append("\n");
-
-        Map<String, Barco> mapeoPosicion = new HashMap<>();
-        for (Barco b : barcos)
-            for (int[] pos : b.getPositions())
-                mapeoPosicion.put(pos[0] + "," + pos[1], b);
-
-        for (int t = 0; t <= numTurnos; t++) {
-            Set<String> fallos   = new HashSet<>();
-            Set<String> tocados  = new HashSet<>();
-            Set<String> hundidos = new HashSet<>();
-
-            for (int d = 0; d < t && d < disparos.size(); d++) {
-                int[] disp = disparos.get(d);
-                String clave = disp[0] + "," + disp[1];
-                Barco barco = mapeoPosicion.get(clave);
-                if (barco == null) {
-                    fallos.add(clave);
+        for (int r = 0; r < SIDE_ROWS; r++) {
+            for (int c = 0; c < BOARD_SIZE; c++) {
+                String color;
+                if (c == WALL_COL) {
+                    color = COLOR_MURALLA;
+                } else if (c <= A_COL_END) {
+                    color = colorDesdEstado(estadoA[r][c], colorMapA.get(r + "," + c));
                 } else {
-                    tocados.add(clave);
-                    boolean barcoCompleto = true;
-                    for (int[] pos : barco.getPositions()) {
-                        if (!tocados.contains(pos[0] + "," + pos[1])) {
-                            barcoCompleto = false;
-                            break;
-                        }
-                    }
-                    if (barcoCompleto) {
-                        for (int[] pos : barco.getPositions())
-                            hundidos.add(pos[0] + "," + pos[1]);
-                    }
+                    color = colorDesdEstado(estadoB[r][c - B_COL_START], colorMapB.get(r + "," + c));
                 }
+                sb.append(turno).append(",").append(r).append(",").append(c)
+                  .append(",").append(color).append("\n");
             }
+        }
+        return sb.toString();
+    }
 
-            for (int r = 0; r < size; r++) {
-                for (int c = 0; c < size; c++) {
-                    String clave = r + "," + c;
-                    String color;
-                    if (hundidos.contains(clave)) {
-                        color = COLOR_HUNDIDO;
-                    } else if (tocados.contains(clave)) {
-                        color = COLOR_TOCADO;
-                    } else if (fallos.contains(clave)) {
-                        color = COLOR_FALLO;
-                    } else if (mapeoPosicion.containsKey(clave)) {
-                        color = colorBarco(mapeoPosicion.get(clave).getSize());
-                    } else {
-                        color = COLOR_AGUA;
+    private String colorDesdEstado(int estado, String colorBarco) {
+        return switch (estado) {
+            case  1 -> colorBarco != null ? colorBarco : COLOR_ALFA;
+            case -1 -> COLOR_FALLO;
+            case -2 -> COLOR_TOCADO;
+            case -3 -> COLOR_HUNDIDO;
+            default -> COLOR_AGUA;
+        };
+    }
+
+    // -------------------------------------------------------------------------
+    // Colocación de barcos
+    // -------------------------------------------------------------------------
+
+    private List<Barco> colocarBarcos(List<Integer> tamanos, Random rand,
+                                       int rowMin, int rowMax, int colMin, int colMax) {
+        List<Barco> resultado = new ArrayList<>();
+        int sideRows = rowMax - rowMin + 1;
+        int sideCols = colMax - colMin + 1;
+        boolean[][] ocupado = new boolean[sideRows][sideCols];
+        int id = 1;
+
+        for (int tam : tamanos) {
+            int intentos = 0;
+            boolean colocado = false;
+            while (!colocado && intentos < 500) {
+                intentos++;
+                boolean horizontal = rand.nextBoolean();
+                int r = rowMin + rand.nextInt(sideRows);
+                int c = colMin + rand.nextInt(sideCols);
+
+                List<int[]> celdas = new ArrayList<>();
+                boolean valido = true;
+                for (int k = 0; k < tam; k++) {
+                    int nr = horizontal ? r     : r + k;
+                    int nc = horizontal ? c + k : c;
+                    if (nr < rowMin || nr > rowMax || nc < colMin || nc > colMax
+                            || ocupado[nr - rowMin][nc - colMin]) {
+                        valido = false;
+                        break;
                     }
-                    sb.append(t).append(",").append(r).append(",").append(c)
-                      .append(",").append(color).append("\n");
+                    celdas.add(new int[]{nr, nc});
+                }
+                if (valido) {
+                    for (int[] pos : celdas) ocupado[pos[0] - rowMin][pos[1] - colMin] = true;
+                    resultado.add(new Barco(id++, tam, celdas));
+                    colocado = true;
                 }
             }
         }
+        return resultado;
+    }
 
-        return sb.toString().trim();
+    // -------------------------------------------------------------------------
+    // Mapeos auxiliares
+    // -------------------------------------------------------------------------
+
+    private Map<String, Barco> buildMapeo(List<Barco> barcos) {
+        Map<String, Barco> m = new HashMap<>();
+        for (Barco b : barcos)
+            for (int[] pos : b.getPositions())
+                m.put(pos[0] + "," + pos[1], b);
+        return m;
+    }
+
+    private Map<String, String> buildColorMap(List<Barco> barcos) {
+        Map<String, String> m = new HashMap<>();
+        for (Barco b : barcos) {
+            String color = colorBarco(b.getSize());
+            for (int[] pos : b.getPositions())
+                m.put(pos[0] + "," + pos[1], color);
+        }
+        return m;
     }
 
     private String colorBarco(int size) {
         if (size == 1) return COLOR_ALFA;
         if (size == 3) return COLOR_GAMMA;
         return COLOR_BETA;
+    }
+
+    // -------------------------------------------------------------------------
+    // Disparador inteligente (Hunt & Target)
+    // -------------------------------------------------------------------------
+
+    private static class IntelligentShooter {
+
+        private final int rowMin, rowMax, colMin, colMax;
+        private final Random rand;
+        private final Set<String> shotAt    = new HashSet<>();
+        private final Deque<int[]> targets  = new ArrayDeque<>();
+
+        IntelligentShooter(int rowMin, int rowMax, int colMin, int colMax, Random rand) {
+            this.rowMin = rowMin; this.rowMax = rowMax;
+            this.colMin = colMin; this.colMax = colMax;
+            this.rand   = rand;
+        }
+
+        int[] nextShot() {
+            // Descartar objetivos ya disparados
+            while (!targets.isEmpty() && shotAt.contains(key(targets.peekFirst())))
+                targets.pollFirst();
+
+            if (!targets.isEmpty()) return targets.pollFirst();
+
+            // Modo caza: celda aleatoria no disparada
+            List<int[]> disponibles = new ArrayList<>();
+            for (int r = rowMin; r <= rowMax; r++)
+                for (int c = colMin; c <= colMax; c++)
+                    if (!shotAt.contains(key(r, c))) disponibles.add(new int[]{r, c});
+
+            return disponibles.get(rand.nextInt(disponibles.size()));
+        }
+
+        // Tocado pero no hundido → añadir celdas adyacentes como objetivos
+        void recordHit(int r, int c) {
+            shotAt.add(key(r, c));
+            int[][] adj = {{r - 1, c}, {r + 1, c}, {r, c - 1}, {r, c + 1}};
+            for (int[] a : adj) {
+                if (a[0] >= rowMin && a[0] <= rowMax
+                        && a[1] >= colMin && a[1] <= colMax
+                        && !shotAt.contains(key(a[0], a[1]))) {
+                    targets.addLast(a);
+                }
+            }
+        }
+
+        // Hundido → limpiar cola y volver a modo caza
+        void recordSunk(int r, int c) {
+            shotAt.add(key(r, c));
+            targets.clear();
+        }
+
+        void recordMiss(int r, int c) {
+            shotAt.add(key(r, c));
+        }
+
+        private String key(int[] pos) { return pos[0] + "," + pos[1]; }
+        private String key(int r, int c) { return r + "," + c; }
     }
 }
