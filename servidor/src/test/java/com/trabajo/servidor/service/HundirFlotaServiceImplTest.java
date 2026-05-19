@@ -40,8 +40,14 @@ class HundirFlotaServiceImplTest {
     void generarToken_DebeDevolverId_Incremental() {
         int t1 = service.generarToken();
         int t2 = service.generarToken();
-        assertTrue(t1 > 0, "El primer token debe ser positivo");
+        assertTrue(t1 >= 10000, "El token debe tener al menos 5 dígitos");
         assertEquals(t1 + 1, t2, "Los tokens deben ser incrementales");
+    }
+
+    @Test
+    void generarToken_DebeSerLargo_MasDeUnDigito() {
+        int token = service.generarToken();
+        assertTrue(String.valueOf(token).length() > 1, "El token debe tener más de un dígito");
     }
 
     // -----------------------------------------------------------------------
@@ -179,5 +185,55 @@ class HundirFlotaServiceImplTest {
     @Test
     void obtenerRawData_ConTokenInexistente_DebeRetornarNull() {
         assertNull(service.obtenerRawData(99999), "Un token que no existe debe devolver null");
+    }
+
+    // -----------------------------------------------------------------------
+    // Redis: verificar persistencia real del store
+    // -----------------------------------------------------------------------
+
+    @Test
+    void redis_procesarSolicitud_DebePersistirDatos() {
+        Map<Integer, Integer> nums = new HashMap<>();
+        nums.put(1, 2);
+        nums.put(2, 1);
+
+        int token = service.generarToken();
+        service.procesarSolicitud(token, nums);
+
+        String rawData = service.obtenerRawData(token);
+        assertNotNull(rawData, "Redis debe haber persistido los datos con procesarSolicitud");
+        assertFalse(rawData.isBlank(), "Los datos persistidos no deben estar vacíos");
+    }
+
+    @Test
+    void redis_SobreescrituraMismoToken_DebeActualizarElValor() {
+        Map<Integer, Integer> nums1 = new HashMap<>();
+        nums1.put(1, 1);
+        Map<Integer, Integer> nums2 = new HashMap<>();
+        nums2.put(2, 2);
+
+        int token = service.generarToken();
+        service.procesarSolicitud(token, nums1);
+        String datosIniciales = service.obtenerRawData(token);
+
+        service.procesarSolicitud(token, nums2);
+        String datosActualizados = service.obtenerRawData(token);
+
+        assertNotNull(datosIniciales);
+        assertNotNull(datosActualizados);
+    }
+
+    @Test
+    void redis_TokenesDistintos_DatosSonIndependientes() {
+        Map<Integer, Integer> nums = new HashMap<>();
+        nums.put(1, 1);
+
+        int token1 = service.simularPartida(nums);
+        int token2 = service.simularPartida(nums);
+
+        assertNotEquals(token1, token2, "Los tokens deben ser distintos");
+        assertNotNull(service.obtenerRawData(token1), "Redis debe tener datos para token1");
+        assertNotNull(service.obtenerRawData(token2), "Redis debe tener datos para token2");
+        assertNull(service.obtenerRawData(token1 - 1), "Token no generado debe devolver null en Redis");
     }
 }

@@ -34,7 +34,7 @@ public class HundirFlotaServiceImpl implements HundirFlotaService {
     private static final String COLOR_MURALLA = "#222222";
 
     private final StringRedisTemplate redisTemplate;
-    private final AtomicInteger tokenCounter = new AtomicInteger(1);
+    private final AtomicInteger tokenCounter = new AtomicInteger(10000);
 
     public HundirFlotaServiceImpl(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
