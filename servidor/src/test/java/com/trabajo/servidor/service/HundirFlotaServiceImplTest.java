@@ -40,8 +40,8 @@ class HundirFlotaServiceImplTest {
     void generarToken_DebeDevolverId_Incremental() {
         int t1 = service.generarToken();
         int t2 = service.generarToken();
-        assertTrue(t1 >= 10000, "El token debe tener al menos 5 dígitos");
-        assertEquals(t1 + 1, t2, "Los tokens deben ser incrementales");
+        assertTrue(t1 >= 100000 && t1 <= 999999, "El token debe ser un número de 6 dígitos");
+        assertTrue(t2 >= 100000 && t2 <= 999999, "El token debe ser un número de 6 dígitos");
     }
 
     @Test

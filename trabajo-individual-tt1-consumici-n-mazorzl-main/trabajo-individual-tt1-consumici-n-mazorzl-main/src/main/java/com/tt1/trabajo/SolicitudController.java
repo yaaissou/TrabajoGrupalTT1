@@ -43,14 +43,15 @@ public class SolicitudController {
         formData.forEach((key, value) -> {
             try {
                 int num = Integer.parseInt(value);
+                int id = Integer.parseInt(key);
                 if (num < 0) {
                     errors.add(key + " no puede ser negativo");
+                    return;
                 }
-                int id = Integer.parseInt(key);
                 if (ics.isValidEntityId()) {
                 	validData.put(id, num);
                 } else {
-                	errors.add(key + "no se corresponde con una entidad");
+                	errors.add(key + " no se corresponde con una entidad");
                 }
             } catch (NumberFormatException e) {
                 errors.add(key + " debe ser un número entero");
@@ -67,6 +68,7 @@ public class SolicitudController {
         		model.addAttribute("token", tok);
         	} else {
         		logger.error("Error en comunicación con servidor de simulación");
+        		model.addAttribute("error", "No se pudo conectar con el servidor de simulación. Comprueba que está en marcha e inténtalo de nuevo.");
         	}
         }
         return "formResult";

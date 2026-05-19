@@ -29,7 +29,7 @@ public class ServicioSolicitudes implements InterfazContactoSim {
             }
 
         } catch (Exception e) {
-            System.out.println("Error al crear la simulación real: " + e.getMessage());
+            System.out.println("Error al crear la simulación real: " + e.getClass().getSimpleName() + " - " + e.getMessage());
         }
 
         return -1;

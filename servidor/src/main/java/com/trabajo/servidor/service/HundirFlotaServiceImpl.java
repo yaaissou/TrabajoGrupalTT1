@@ -34,7 +34,7 @@ public class HundirFlotaServiceImpl implements HundirFlotaService {
     private static final String COLOR_MURALLA = "#222222";
 
     private final StringRedisTemplate redisTemplate;
-    private final AtomicInteger tokenCounter = new AtomicInteger(10000);
+    private final Random tokenRandom = new Random();
 
     public HundirFlotaServiceImpl(StringRedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
@@ -42,7 +42,7 @@ public class HundirFlotaServiceImpl implements HundirFlotaService {
 
     @Override
     public int generarToken() {
-        return tokenCounter.getAndIncrement();
+        return 100000 + tokenRandom.nextInt(900000);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.trabajo.servidor.model.BattleshipRequest;
 import com.trabajo.servidor.model.BattleshipResponse;
 import com.trabajo.servidor.model.SimulacionMensaje;
 import com.trabajo.servidor.service.HundirFlotaService;
+import org.springframework.amqp.AmqpException;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -86,7 +87,12 @@ public class HundirFlotaController {
         }
 
         int token = hundirFlotaService.generarToken();
-        rabbitTemplate.convertAndSend(RabbitMQConfig.QUEUE_NAME, new SimulacionMensaje(token, nums));
+
+        try {
+            rabbitTemplate.convertAndSend(RabbitMQConfig.QUEUE_NAME, new SimulacionMensaje(token, nums));
+        } catch (AmqpException e) {
+            hundirFlotaService.procesarSolicitud(token, nums);
+        }
 
         BattleshipResponse response = new BattleshipResponse();
         response.setDone(true);
