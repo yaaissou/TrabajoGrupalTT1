@@ -1,5 +1,6 @@
 com.trabajo.servidor
 com.trabajo.servidor.config
 com.trabajo.servidor.controller
+com.trabajo.servidor.messaging
 com.trabajo.servidor.model
 com.trabajo.servidor.service

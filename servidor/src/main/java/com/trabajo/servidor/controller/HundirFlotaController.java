@@ -11,24 +11,53 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+/**
+ * Controlador REST que expone la API del motor de simulación de Hundir la Flota.
+ * <p>
+ * Se encarga de recibir las peticiones JSON del cliente, validar las reglas
+ * del juego (como el límite de celdas), delegar la carga de trabajo de forma
+ * asíncrona a RabbitMQ y devolver los resultados procesados.
+ * * @author [Tu Nombre / Tu Grupo]
+ * @version 1.0
+ */
 @RestController
 public class HundirFlotaController {
 
-    // Límite por lado: mitad de 21 filas × 10 columnas = 105
+    /**
+     * Límite máximo de celdas permitidas por tablero.
+     * Equivale a la mitad de un tablero de 21 filas × 10 columnas (105 celdas).
+     */
     private static final int MAX_CELDAS = 105;
 
     private final HundirFlotaService hundirFlotaService;
     private final RabbitTemplate rabbitTemplate;
 
+    /**
+     * Constructor para inyección de dependencias.
+     *
+     * @param hundirFlotaService Servicio con la lógica de negocio de la flota.
+     * @param rabbitTemplate     Plantilla para enviar mensajes asíncronos al bróker RabbitMQ.
+     */
     public HundirFlotaController(HundirFlotaService hundirFlotaService, RabbitTemplate rabbitTemplate) {
         this.hundirFlotaService = hundirFlotaService;
         this.rabbitTemplate = rabbitTemplate;
     }
 
     /**
-     * POST http://localhost:8080/Solicitud/Solicitar?nombreUsuario=Marcos
-     * Body: {"nums": {"1": n1, "2": n2, "3": n3}}
-     * Respuesta: {"done": true, "tokenSolicitud": 42}
+     * Solicita la creación de una nueva simulación de partida.
+     * <p>
+     * <strong>Endpoint:</strong> {@code POST /Solicitud/Solicitar}<br>
+     * <p>
+     * <strong>Validaciones:</strong>
+     * <ul>
+     * <li>Ningún tipo de barco puede tener una cantidad negativa.</li>
+     * <li>La suma total de celdas ocupadas por los barcos no puede exceder {@value #MAX_CELDAS}.</li>
+     * </ul>
+     * Si las validaciones pasan, se genera un token y se encola un mensaje en RabbitMQ para su procesamiento asíncrono.
+     *
+     * @param nombreUsuario (Opcional) Nombre del jugador que solicita la partida.
+     * @param request       Objeto {@link BattleshipRequest} con la cantidad de barcos deseada (Alfa, Beta, Gamma).
+     * @return Una respuesta {@link BattleshipResponse} que contiene el éxito de la operación, mensajes de error o el token generado.
      */
     @PostMapping("/Solicitud/Solicitar")
     public ResponseEntity<BattleshipResponse> solicitarSimulacion(
@@ -67,8 +96,13 @@ public class HundirFlotaController {
     }
 
     /**
-     * POST http://localhost:8080/Resultados?nombreUsuario=Marcos&tok=42
-     * Respuesta: {"done": true, "tokenSolicitud": 42, "data": "10\nWIN\n..."}
+     * Consulta y recupera los resultados de una simulación previamente encolada.
+     * <p>
+     * <strong>Endpoint:</strong> {@code POST /Resultados}
+     *
+     * @param nombreUsuario (Opcional) Nombre del jugador que realiza la consulta.
+     * @param tok           El token numérico identificador de la simulación.
+     * @return Un objeto {@link BattleshipResponse} que incluye los datos finales ({@code rawData}) del tablero si el token existe.
      */
     @PostMapping("/Resultados")
     public ResponseEntity<BattleshipResponse> obtenerResultados(

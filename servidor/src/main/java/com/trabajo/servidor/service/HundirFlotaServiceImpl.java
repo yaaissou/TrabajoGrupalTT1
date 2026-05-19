@@ -2,6 +2,7 @@ package com.trabajo.servidor.service;
 
 import com.trabajo.servidor.model.Barco;
 import org.springframework.stereotype.Service;
+import org.springframework.data.redis.core.StringRedisTemplate;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -32,8 +33,12 @@ public class HundirFlotaServiceImpl implements HundirFlotaService {
     private static final String COLOR_HUNDIDO = "#cc0000";
     private static final String COLOR_MURALLA = "#222222";
 
-    private final ConcurrentHashMap<Integer, String> partidas = new ConcurrentHashMap<>();
+    private final StringRedisTemplate redisTemplate;
     private final AtomicInteger tokenCounter = new AtomicInteger(1);
+
+    public HundirFlotaServiceImpl(StringRedisTemplate redisTemplate) {
+        this.redisTemplate = redisTemplate;
+    }
 
     @Override
     public int generarToken() {
@@ -43,18 +48,18 @@ public class HundirFlotaServiceImpl implements HundirFlotaService {
     @Override
     public int simularPartida(Map<Integer, Integer> nums) {
         int token = generarToken();
-        partidas.put(token, ejecutarSimulacion(nums));
+        redisTemplate.opsForValue().set(String.valueOf(token), ejecutarSimulacion(nums));
         return token;
     }
 
     @Override
     public void procesarSolicitud(int token, Map<Integer, Integer> nums) {
-        partidas.put(token, ejecutarSimulacion(nums));
+        redisTemplate.opsForValue().set(String.valueOf(token), ejecutarSimulacion(nums));
     }
 
     @Override
     public String obtenerRawData(int token) {
-        return partidas.getOrDefault(token, null);
+        return redisTemplate.opsForValue().get(String.valueOf(token));
     }
 
     // -------------------------------------------------------------------------
