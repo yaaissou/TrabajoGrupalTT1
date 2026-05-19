@@ -150,26 +150,24 @@ Este documento contiene el registro cronológico de las reuniones de sincronizac
  
 ---
 
-## Acta 07: Finalización del Motor Automático y Estabilización General
+## Acta 07: Finalización del Motor Automático y Cierre del Proyecto
 * **Fecha:** 19 de Mayo de 2026
 * **Asistentes:** Pablo Ramirez, Marcos Zorzano, Yazid Aissou, Angel Muro.
-* **Tipo de reunión:** Cierre de desarrollo lógico, resolución de regresiones y revisión documental.
+* **Tipo de reunión:** Cierre de desarrollo lógico, resolución de regresiones y revisión documental final.
 
 #### 📝 Orden del Día
 1. Revisión final de la implementación del motor de simulación automático (Jugador 1 vs Jugador 2).
 2. Análisis, depuración y resolución de los fallos detectados en la suite de pruebas.
 3. Revisión de formato, pulido y maquetación final de los documentos de información y manuales.
-4. Ratificación de roles para el cierre del ciclo de desarrollo actual.
+4. Cierre formal del ciclo de desarrollo.
 
 #### 🤝 Acuerdos Adoptados
-* **Mantenimiento de Roles:** Se acuerda por unanimidad mantener la asignación actual de responsabilidades (sin rotación) para consolidar los esfuerzos en la corrección de errores y el pulido documental, asegurando un cierre de fase estable.
-* **Culminación del Motor de Simulación:** Se da por finalizado y validado el código que implementa los cambios requeridos por el cliente. El algoritmo ahora ejecuta de forma autónoma la partida completa de "Hundir la Flota" sin intervención externa, procesando la toma de decisiones interna de manera eficiente.
-* **Estabilización del Entorno de Pruebas (Testing):** Se han refactorizado y corregido los tests unitarios y de integración que arrojaban errores (regresiones derivadas del cambio de arquitectura de la Semana 06). La suite de pruebas vuelve a estar sincronizada con la nueva lógica, garantizando la integridad del código.
-* **Consolidación y Pulido Documental:** Se ha llevado a cabo una revisión ortotipográfica, de estilo y de formato en toda la documentación técnica e informativa del proyecto. Los documentos se consideran en estado "presentables" y cumplen con el rigor académico exigido para su evaluación.
+* **Mantenimiento de Roles:** Se acuerda por unanimidad mantener la asignación actual de responsabilidades para consolidar los esfuerzos en la corrección final de errores y el pulido documental.
+* **Culminación del Motor de Simulación:** Se da por finalizado y validado el código que implementa los cambios requeridos por el cliente. El algoritmo ahora ejecuta de forma autónoma la partida completa de "Hundir la Flota", procesando la toma de decisiones interna de manera eficiente.
+* **Estabilización del Entorno de Pruebas (Testing):** Se han refactorizado y corregido los tests unitarios y de integración que arrojaban errores tras el último cambio de arquitectura. La suite de pruebas vuelve a estar sincronizada con la nueva lógica, garantizando la integridad del código al 100%.
+* **Consolidación y Pulido Documental:** Se ha llevado a cabo una revisión ortotipográfica, de estilo y de formato en toda la documentación técnica e informativa del proyecto. Los documentos cumplen con el rigor académico exigido para su evaluación.
 
-#### 🚀 Próximos Pasos 
-* **Programador (Angel):** Preparar la integración del motor autónomo finalizado con el sistema de mensajería asíncrona (RabbitMQ) y adaptar las respuestas al formato JSON definitivo.
-* **DevOps (Yazid):** Retomar la configuración de la base de datos NoSQL y asegurar que el despliegue del contenedor Docker integre correctamente tanto la aplicación como las nuevas dependencias de persistencia.
-* **Tester (Pablo):** Realizar una auditoría de la cobertura de código (*Code Coverage*) y diseñar pruebas específicas para evaluar el rendimiento del motor bajo condiciones de concurrencia.
-* **Redactor (Marcos):** Congelar la versión actual de la documentación, compilar los informes de cierre del sprint y comenzar la preparación del material de apoyo para la defensa técnica del proyecto.
+#### 🏁 Cierre del Proyecto y Entrega
+* **Fin del Desarrollo Técnico:** Se declara oficialmente cerrado el ciclo de desarrollo del Servidor de Simulación. No se añadirán nuevas funcionalidades ni se modificará la base de código actual, habiendo cumplido todos los requisitos del cliente.
+* **Preparación para la Defensa:** El esfuerzo del equipo queda ahora a la espera de la entrega formal del código, la memoria técnica, las actas y la posterior defensa académica del trabajo realizado.
 
