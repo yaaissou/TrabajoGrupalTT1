@@ -22,6 +22,12 @@ Cada dos semanas, los integrantes avanzan un puesto hacia la derecha siguiendo e
 * **Redactor:** Marcos Zorzano
 * **DevOps:** Yazid Aissou
 
+**Asignación Actual (Semanas 5, 6, 7 y 8):**
+* **Programador:** Yazid Aissou
+* **Tester:** Angel Muro
+* **Redactor:** Pablo Ramirez
+* **DevOps:** Marcos Zorzano
+
 ## 2. Responsabilidades Actuales
 
 * **Programador:** Desarrolla el código fuente de los *endpoints* y la lógica de negocio.
