@@ -2,19 +2,34 @@ package com.trabajo.servidor.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class HundirFlotaServiceImplTest {
 
     private HundirFlotaServiceImpl service;
+    private Map<String, String> fakeStore;
 
     @BeforeEach
+    @SuppressWarnings("unchecked")
     void setUp() {
-        service = new HundirFlotaServiceImpl();
+        fakeStore = new HashMap<>();
+
+        StringRedisTemplate redisTemplate = mock(StringRedisTemplate.class);
+        ValueOperations<String, String> valueOps = mock(ValueOperations.class);
+
+        when(redisTemplate.opsForValue()).thenReturn(valueOps);
+        doAnswer(inv -> { fakeStore.put(inv.getArgument(0), inv.getArgument(1)); return null; })
+                .when(valueOps).set(anyString(), anyString());
+        when(valueOps.get(anyString())).thenAnswer(inv -> fakeStore.get(inv.getArgument(0)));
+
+        service = new HundirFlotaServiceImpl(redisTemplate);
     }
 
     // -----------------------------------------------------------------------
