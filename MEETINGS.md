@@ -9,19 +9,19 @@ Este documento contiene el registro cronológico de las reuniones de sincronizac
 * **Asistentes:** Pablo Ramirez, Marcos Zorzano, Yazid Aissou, Angel Muro.
 * **Tipo de reunión:** Planificación y Organización Inicial.
 
-#### 📝 Orden del Día
+####  Orden del Día
 1. Presentación formal del equipo de trabajo.
 2. Definición de la metodología de trabajo para el desarrollo del Servidor de Simulación.
 3. Reparto de responsabilidades para el primer ciclo de desarrollo (Semanas 1 y 2).
 
-#### 🤝 Acuerdos Adoptados
+####  Acuerdos Adoptados
 * **Metodología de Rotación:** Se aprueba por unanimidad establecer un sistema de rotación de roles con una periodicidad quincenal para garantizar que todos los miembros adquieran experiencia en todas las capas del proyecto.
 * **Asignación del Sprint 1 y 2 (Semanas 1 y 2):** * Queda designado **Pablo Ramirez** como responsable de desarrollo (*Programador*).
   * Queda designado **Marcos Zorzano** como responsable de calidad (*Tester*).
   * Queda designado **Yazid Aissou** como responsable de documentación técnica (*Redactor*).
   * Queda designado **Angel Muro** como administrador de infraestructura e integración (*DevOps*).
 
-#### 🚀 Próximos Pasos 
+####  Próximos Pasos 
 * **DevOps:** Inicializar el repositorio base con Spring Boot y configurar los permisos en GitHub.
 * **Redactor:** Redactar y publicar los documentos metodológicos iniciales (`CONTRIBUTING.md` y `MEETINGS.md`).
 * **Equipo completo:** Iniciar el análisis funcional de los tres *endpoints* principales de la API REST para comenzar su implementación en los próximos días.
@@ -33,17 +33,17 @@ Este documento contiene el registro cronológico de las reuniones de sincronizac
 * **Asistentes:** Pablo Ramirez, Marcos Zorzano, Yazid Aissou, Angel Muro.
 * **Tipo de reunión:** Elección de tipo de proyecto y estructuración técnica.
 
-#### 📝 Orden del Día
+####  Orden del Día
 1. Elecciones sobre la arquitectura de persistencia y flujo de envío de solicitudes.
 2. Diseño de la estrategia de ramas en el repositorio y automatización de despliegue.
 3. Planificación de la documentación técnica y empaquetado del servicio mediante contenedores.
 
-#### 🤝 Acuerdos Adoptados
+####  Acuerdos Adoptados
 * **Jerarquía de Ramas:** Se acuerda la creación de un sistema de tres ramas: `main` (desarrollo activo), `early` (código validado por tests) y `stable` (versión pública definitiva).
 * **Automatización CI/CD:** Implementación de *GitHub Actions* para ejecutar tests unitarios de forma automática en cada commit y gestionar la publicación de la documentación Javadoc vía *GitHub Pages*.
 * **Estandarización del Entorno:** Adopción de Docker para el empaquetado del servidor, garantizando la compatibilidad del software en todos los puestos de trabajo.
 
-#### 🚀 Próximos Pasos 
+####  Próximos Pasos 
 * **Programador (Pablo):** Desarrollar la lógica principal del servidor para la recepción de solicitudes, y la obtencion de tockens.
 * **DevOps (Angel):** Configurar las ramas en GitHub y redactar el `Dockerfile` del proyecto.
 * **Tester (Marcos):** Iniciar el diseño de la suite de pruebas unitarias para validar la integridad de la generación de tokens.
@@ -56,20 +56,20 @@ Este documento contiene el registro cronológico de las reuniones de sincronizac
 * **Asistentes:** Pablo Ramirez, Marcos Zorzano, Yazid Aissou, Angel Muro.
 * **Tipo de reunión:** Resolución de incidencias técnicas, estabilización del código y generación de manuales.
 
-#### 📝 Orden del Día
+####  Orden del Día
 1. Formalización del cambio de roles semanales según lo establecido en `CONTRIBUTING.md`.
 2. Evaluación y resolución de problemas de compilación en el entorno de pruebas y CI/CD (GitHub Actions).
 3. Debate sobre la gestión de modelos de datos (uso de la librería Lombok frente a Vanilla Java).
 4. Revisión de la documentación técnica generada (Javadoc) y empaquetado final del contenedor Docker.
 
-#### 🤝 Acuerdos Adoptados
+####  Acuerdos Adoptados
 * **Downgrade a Java 17 (LTS):** Se aprueba por unanimidad bajar la versión del proyecto de Java 23 a Java 17 LTS en el archivo `pom.xml` y en los flujos de GitHub Actions. Esto asegura la compatibilidad total con herramientas de testing como Mockito y otorga mayor estabilidad a largo plazo.
 * **Refactorización de Modelos y Lombok:** Se resolvió el conflicto de dependencias y errores de "clase ya definida" depurando las clases `DatosSolicitud` y `DatosSimulacion` para garantizar la robustez del pipeline en terminal, asegurando que constructores y getters/setters no generen fallos al compilar.
 * **Estabilización de Tests:** Se corrigieron los problemas de inicialización (NullPointerException) en los tests de integración de la vista gráfica (`misionConseguida.html`), logrando que la suite completa de 11 tests pase con éxito en la integración continua.
 * **Documentación Javadoc Integral:** Se acuerda mantener el estándar de calidad en la documentación, utilizando etiquetas HTML y anotaciones oficiales (`@param`, `@return`, `@author`) en toda la capa de Controladores, Modelos, Configuración y clase principal, solventando los problemas de generación de Maven.
 * **Aislamiento en Docker:** Se valida la configuración del `Dockerfile` utilizando la imagen ligera `eclipse-temurin:17-jdk` y corrigiendo las rutas hacia `servidor/target/`, logrando un despliegue local exitoso por el puerto 8080.
 
-#### 🚀 Próximos Pasos 
+####  Próximos Pasos 
 * **Programador (Angel):** Iniciar el desarrollo de la lógica matemática de simulación real, dado que la arquitectura base y la persistencia en memoria (`ConcurrentHashMap`) ya están validadas.
 * **DevOps (Yazid):** Monitorizar el pipeline automático de GitHub Actions tras la sincronización de ramas (`main` a `early`) y asegurar que los despliegues en contenedores sigan siendo estables con los futuros cambios.
 * **Tester (Pablo):** Diseñar nuevos casos de prueba para cubrir la lógica de negocio y los cálculos matemáticos que el programador implementará en el próximo ciclo, manteniendo el 100% de los tests en verde.
@@ -82,18 +82,18 @@ Este documento contiene el registro cronológico de las reuniones de sincronizac
 * **Asistentes:** Pablo Ramirez, Marcos Zorzano, Yazid Aissou, Angel Muro.
 * **Tipo de reunión:** Sesión de diseño conceptual y propuesta de experiencia de usuario.
 
-#### 📝 Orden del Día
+####  Orden del Día
 1. Definición teórica del motor de simulación y las variables matemáticas implicadas.
 2. Brainstorming sobre la representación visual de los resultados en la interfaz del cliente.
 3. Análisis de la coherencia entre los parámetros de entrada (`DatosSolicitud`) y la salida visual.
 4. Consenso sobre el flujo de navegación antes de iniciar la fase de codificación.
 
-#### 🤝 Acuerdos Adoptados
+####  Acuerdos Adoptados
 * **Abstracción del Motor Lógico:** Se acuerda finalizar el esquema matemático completo antes de realizar cualquier "picado" de código. El objetivo es asegurar que el algoritmo sea escalable y que el campo `resultado` del modelo pueda contener la estructura de datos necesaria para la representación final.
 * **Consenso sobre la Interfaz Gráfica:** Se define que la visualización para el cliente debe basarse en una cuadrícula dinámica o una representación gráfica clara (grid) que permita interpretar los resultados de la simulación de un vistazo. Se prioriza la legibilidad de los datos procesados sobre la complejidad estética.
 * **Mantenimiento de la Estabilidad:** Se decide no realizar modificaciones en la base de código esta semana para preservar el estado "verde" de los tests y la infraestructura lograda en la Semana 03, centrando el esfuerzo exclusivamente en el diseño y la documentación de requisitos.
 
-#### 🚀 Próximos Pasos 
+####  Próximos Pasos 
 * **Programador (Angel):** Elaborar el pseudocódigo del algoritmo de simulación y definir la estructura interna que tendrá el resultado (ej. matriz, lista de eventos, etc.).
 * **DevOps (Yazid):** Investigar la integración de librerías CSS o componentes para la renderización de la cuadrícula en las plantillas Thymeleaf.
 * **Tester (Pablo):** Definir los casos de prueba teóricos y los rangos de valores esperados para validar la lógica matemática una vez se implemente.
@@ -106,18 +106,18 @@ Este documento contiene el registro cronológico de las reuniones de sincronizac
 * **Asistentes:** Pablo Ramirez, Marcos Zorzano, Yazid Aissou, Angel Muro.
 * **Tipo de reunión:** Revisión de código (Code Review) y validación de infraestructura CI/CD.
 
-#### 📝 Orden del Día
+####  Orden del Día
 1. Revisión de la implementación en código del algoritmo matemático y motor de simulación.
 2. Verificación de los flujos de trabajo (pipelines) en GitHub Actions tras la subida de los nuevos commits.
 3. Planificación de la integración futura con la interfaz gráfica.
 
-#### 🤝 Acuerdos Adoptados
+####  Acuerdos Adoptados
 * **Mantenimiento de Roles:** Se acuerda por unanimidad posponer la rotación de roles programada, manteniendo la configuración de la Semana 04. Esta decisión busca aprovechar la inercia técnica y el contexto actual de cada miembro para no interrumpir el desarrollo crítico del algoritmo.
 * **Desarrollo Exclusivo del Motor Lógico:** Durante esta semana, el equipo se ha centrado estrictamente en programar el código del algoritmo matemático diseñado en la sesión anterior. Se ha sustituido la generación de resultados "mock" por la estructura de datos real que alimentará la simulación.
 * **Integración Continua Exitosa (CI/CD):** Se ha comprobado y auditado el repositorio, confirmando que todos los *pushes* hacia la rama `early` han pasado los chequeos de GitHub Actions en verde. La compilación con Maven y los tests unitarios previos siguen funcionando correctamente con el nuevo código integrado.
 * **Pausa Temporal en UI:** Para evitar falsos positivos en los errores de compilación, se acordó explícitamente no modificar las plantillas de Thymeleaf ni los controladores de vista en esta iteración, asegurando primero la estabilidad absoluta del "cerebro" del sistema.
 
-#### 🚀 Próximos Pasos 
+####  Próximos Pasos 
 * **Programador (Angel):** Conectar el motor lógico recién desarrollado con el modelo de datos final, preparando la estructura que será enviada posteriormente a la vista del cliente.
 * **Tester (Pablo):** Redactar y ejecutar las pruebas unitarias (JUnit) específicas para el nuevo algoritmo, introduciendo casos límite para asegurar que las matemáticas del motor no fallan bajo ninguna condición.
 * **DevOps (Yazid):** Auditar que el contenedor Docker sigue compilando y levantando de forma óptima con la nueva carga computacional del proyecto.
@@ -130,19 +130,19 @@ Este documento contiene el registro cronológico de las reuniones de sincronizac
 * **Asistentes:** Pablo Ramirez, Marcos Zorzano, Yazid Aissou, Angel Muro.
 * **Tipo de reunión:** Ajuste de requisitos del cliente y validación de cambios en el core.
 
-#### 📝 Orden del Día
+####  Orden del Día
 1. Revisión del feedback del cliente tras la reunión del pasado jueves.
 2. Desestimación de la interfaz gráfica y simplificación del flujo de salida.
 3. Validación de la actualización integral de la documentación técnica (Javadoc).
 4. Rediseño del motor.
 
-#### 🤝 Acuerdos Adoptados
+####  Acuerdos Adoptados
 * **Pivotaje hacia Backend-Only:** Tras las indicaciones del cliente, se acuerda oficialmente desestimar el desarrollo de una interfaz gráfica (UI). El proyecto se centrará en la robustez de la lógica interna. El flujo se mantiene en: entrada de 3 parámetros → generación de Token → salida del resultado de la partida (Hundir la Flota) cumpliendo estrictamente con los requisitos.
 * **Actualización y Estabilización de Documentación:** Se valida el trabajo del Redactor (**Marcos**) en la actualización integral del Javadoc, cubriendo las nuevas clases de RabbitMQ y los controladores REST. Se confirma que la documentación es coherente con el código actual y está lista para su despliegue en el sitio estático.
 * **Refactorización de la Lógica de Juego:** Se ha modificado el código para que el juego deje de ser una interacción individual. Ahora el sistema procesa la lógica de "Hundir la Flota" de forma interna, preparando el terreno para una simulación competitiva automatizada.
 * **Sincronización de Repositorio:** Se da por resuelto el conflicto de versiones en la rama `main` tras el proceso de *merge* realizado, asegurando que todos los miembros trabajan ahora sobre la versión estable que incluye la documentación y los nuevos controladores.
 
-#### 🚀 Próximos Pasos 
+####  Próximos Pasos 
 * **Programador (Angel):** Evolucionar el motor de juego para que pase de ser individual a una simulación de dos jugadores (Jugador 1 vs Jugador 2). La partida debe ser totalmente automática, simulando un proceso de toma de decisiones o "IA" interna sin intervención del cliente.
 * **DevOps (Yazid):** Iniciar la investigación y configuración de una base de datos NoSQL.
 * **Tester (Pablo):** Adaptar la suite de pruebas unitarias para validar que el juego automático se desarrolla correctamente y que no hay bucles infinitos en la "lógica de pensamiento" de la simulación.
@@ -155,19 +155,19 @@ Este documento contiene el registro cronológico de las reuniones de sincronizac
 * **Asistentes:** Pablo Ramirez, Marcos Zorzano, Yazid Aissou, Angel Muro.
 * **Tipo de reunión:** Cierre de desarrollo lógico, resolución de regresiones y revisión documental final.
 
-#### 📝 Orden del Día
+####  Orden del Día
 1. Revisión final de la implementación del motor de simulación automático (Jugador 1 vs Jugador 2).
 2. Análisis, depuración y resolución de los fallos detectados en la suite de pruebas.
 3. Revisión de formato, pulido y maquetación final de los documentos de información y manuales.
 4. Cierre formal del ciclo de desarrollo.
 
-#### 🤝 Acuerdos Adoptados
+####  Acuerdos Adoptados
 * **Mantenimiento de Roles:** Se acuerda por unanimidad mantener la asignación actual de responsabilidades para consolidar los esfuerzos en la corrección final de errores y el pulido documental.
 * **Culminación del Motor de Simulación:** Se da por finalizado y validado el código que implementa los cambios requeridos por el cliente. El algoritmo ahora ejecuta de forma autónoma la partida completa de "Hundir la Flota", procesando la toma de decisiones interna de manera eficiente.
 * **Estabilización del Entorno de Pruebas (Testing):** Se han refactorizado y corregido los tests unitarios y de integración que arrojaban errores tras el último cambio de arquitectura. La suite de pruebas vuelve a estar sincronizada con la nueva lógica, garantizando la integridad del código al 100%.
 * **Consolidación y Pulido Documental:** Se ha llevado a cabo una revisión ortotipográfica, de estilo y de formato en toda la documentación técnica e informativa del proyecto. Los documentos cumplen con el rigor académico exigido para su evaluación.
 
-#### 🏁 Cierre del Proyecto y Entrega
+####  Cierre del Proyecto y Entrega
 * **Fin del Desarrollo Técnico:** Se declara oficialmente cerrado el ciclo de desarrollo del Servidor de Simulación. No se añadirán nuevas funcionalidades ni se modificará la base de código actual, habiendo cumplido todos los requisitos del cliente.
 * **Preparación para la Defensa:** El esfuerzo del equipo queda ahora a la espera de la entrega formal del código, la memoria técnica, las actas y la posterior defensa académica del trabajo realizado.
 
