@@ -7,7 +7,11 @@
       "Bash(git commit -m ' *)",
       "Bash(git push *)",
       "Bash(git pull *)",
-      "Bash(mvn test *)"
+      "Bash(mvn test *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\Usuario\\\\Downloads\\\\TrabajoGrupalTT1\" -Recurse -Filter \"*.java\")",
+      "Bash(Select-Object FullName)",
+      "Bash(Head -20)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\Usuario\\\\Downloads\\\\TrabajoGrupalTT1\" -Recurse | Where-Object { $_.Name -match \"docker-compose|Dockerfile|\\\\.sh$|\\\\.bat$\" } | Select-Object FullName)"
     ]
   }
 }
