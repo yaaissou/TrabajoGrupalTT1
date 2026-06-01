@@ -168,6 +168,7 @@ Este documento contiene el registro cronológico de las reuniones de sincronizac
 * **Culminación del Motor de Simulación:** Se da por finalizado y validado el código que implementa los cambios requeridos por el cliente. El algoritmo ahora ejecuta de forma autónoma la partida completa de "Hundir la Flota", procesando la toma de decisiones interna de manera eficiente.
 * **Estabilización del Entorno de Pruebas (Testing):** Se han refactorizado y corregido los tests unitarios y de integración que arrojaban errores tras el último cambio de arquitectura. La suite de pruebas vuelve a estar sincronizada con la nueva lógica, garantizando la integridad del código al 100%.
 * **Consolidación y Pulido Documental:** Se ha llevado a cabo una revisión ortotipográfica, de estilo y de formato en toda la documentación técnica e informativa del proyecto. Los documentos cumplen con el rigor académico exigido para su evaluación.
+* **Arreglo de las issues:** Una vez terminado el proyecto se intentó arreglar issues con herramientas gráficas. Únicamente se pudieron corregir dos.
 
 ####  Cierre del Proyecto y Entrega
 * **Fin del Desarrollo Técnico:** Se declara oficialmente cerrado el ciclo de desarrollo del Servidor de Simulación. No se añadirán nuevas funcionalidades ni se modificará la base de código actual, habiendo cumplido todos los requisitos del cliente.
