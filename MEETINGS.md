@@ -157,13 +157,13 @@ Este documento contiene el registro cronológico de las reuniones de sincronizac
 * **Asistentes:** Pablo Ramirez, Marcos Zorzano, Yazid Aissou, Angel Muro.
 * **Tipo de reunión:** Cierre de desarrollo lógico, resolución de regresiones y revisión documental final.
 
-####  Orden del Día
+#### 📝 Orden del Día
 1. Revisión final de la implementación del motor de simulación automático (Jugador 1 vs Jugador 2).
 2. Análisis, depuración y resolución de los fallos detectados en la suite de pruebas.
 3. Revisión de formato, pulido y maquetación final de los documentos de información y manuales.
 4. Cierre formal del ciclo de desarrollo.
 
-####  Acuerdos Adoptados
+#### 🤝 Acuerdos Adoptados
 * **Mantenimiento de Roles:** Se acuerda por unanimidad mantener la asignación actual de responsabilidades para consolidar los esfuerzos en la corrección final de errores y el pulido documental.
 * **Culminación del Motor de Simulación:** Se da por finalizado y validado el código que implementa los cambios requeridos por el cliente. El algoritmo ahora ejecuta de forma autónoma la partida completa de "Hundir la Flota", procesando la toma de decisiones interna de manera eficiente.
 * **Estabilización del Entorno de Pruebas (Testing):** Se han refactorizado y corregido los tests unitarios y de integración que arrojaban errores tras el último cambio de arquitectura. La suite de pruebas vuelve a estar sincronizada con la nueva lógica, garantizando la integridad del código al 100%.
